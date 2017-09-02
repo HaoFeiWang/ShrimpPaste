@@ -38,14 +38,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initNavigationView() {
         bottomNavigationView.setSelectedItemId(0);
-        getSupportFragmentManager().beginTransaction().add(R.id.home_content_vp,fragmentList[0]).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.home_content_rl,fragmentList[0]).commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 onBottomTabItemClick(item);
                 if (currentFragment!=null){
                     getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.home_content_vp,currentFragment).commit();
+                        .replace(R.id.home_content_rl,currentFragment).commit();
                     Log.e("==========",currentFragment.toString());
                 }
                 return true;
