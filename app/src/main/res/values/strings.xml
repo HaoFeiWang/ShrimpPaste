@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ShrimpPaste</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_launch">LaunchActivity</string>
+    <string name="string_bottom_tab_android">安卓</string>
+    <string name="string_bottom_tab_ios">苹果</string>
+    <string name="string_bottom_tab_girl">妹纸</string>
+    <string name="string_bottom_tab_personal">个人</string>
 </resources>
