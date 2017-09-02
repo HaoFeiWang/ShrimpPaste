@@ -3,7 +3,6 @@ package com.sppe.shrimppaste.view.activity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +19,6 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @BindView(R.id.home_content_vp)
-    ViewPager viewPager;
     @BindView(R.id.home_bottom_bnv)
     BottomNavigationView bottomNavigationView;
 
