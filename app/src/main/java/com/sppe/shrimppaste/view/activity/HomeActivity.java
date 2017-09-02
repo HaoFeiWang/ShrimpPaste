@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.sppe.shrimppaste.R;
@@ -20,9 +21,9 @@ import butterknife.ButterKnife;
 public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.home_content_vp)
-    private ViewPager viewPager;
+    ViewPager viewPager;
     @BindView(R.id.home_bottom_bnv)
-    private BottomNavigationView bottomNavigationView;
+    BottomNavigationView bottomNavigationView;
 
     private Fragment[] fragmentList;
     private Fragment currentFragment;
@@ -39,30 +40,37 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initNavigationView() {
+        bottomNavigationView.setSelectedItemId(0);
+        getSupportFragmentManager().beginTransaction().add(R.id.home_content_vp,fragmentList[0]).commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.menu_item_bottom_tab_android:
-                        currentFragment = fragmentList[0];
-                        break;
-                    case R.id.menu_item_bottom_tab_ios:
-                        currentFragment = fragmentList[1];
-                        break;
-                    case R.id.menu_item_bottom_tab_girl:
-                        currentFragment = fragmentList[2];
-                        break;
-                    case R.id.menu_item_bottom_tab_personal:
-                        currentFragment = fragmentList[3];
-                        break;
-                }
+                onBottomTabItemClick(item);
                 if (currentFragment!=null){
                     getSupportFragmentManager().beginTransaction()
-                        .replace(R.layout.fragment_android,currentFragment).commit();
+                        .replace(R.id.home_content_vp,currentFragment).commit();
+                    Log.e("==========",currentFragment.toString());
                 }
                 return true;
             }
         });
+    }
+
+    private void onBottomTabItemClick(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_bottom_tab_android:
+                currentFragment = fragmentList[0];
+                break;
+            case R.id.menu_item_bottom_tab_ios:
+                currentFragment = fragmentList[1];
+                break;
+            case R.id.menu_item_bottom_tab_girl:
+                currentFragment = fragmentList[2];
+                break;
+            case R.id.menu_item_bottom_tab_personal:
+                currentFragment = fragmentList[3];
+                break;
+        }
     }
 
     private void initFragments() {
