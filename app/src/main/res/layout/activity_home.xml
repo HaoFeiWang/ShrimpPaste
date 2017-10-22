@@ -6,19 +6,26 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sppe.shrimppaste.view.activity.HomeActivity">
+    tools:context="com.sppe.shrimppaste.ui.activity.HomeActivity">
 
     <RelativeLayout
-        android:id="@+id/home_content_rl"
+        android:id="@+id/rl_home_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/home_bottom_bnv"/>
+        android:layout_above="@+id/bnv_home_bottom"/>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/home_bottom_bnv"
+        android:id="@+id/bnv_home_bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_height_home_bottom"
+        android:layout_height="@dimen/home_bottom_height"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu_home_bottom_navigition"
+        app:menu="@menu/home_bottom_navigition"
         android:visibility="visible"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divide_height"
+        android:layout_above="@id/bnv_home_bottom"
+        android:background="@color/divide"/>
+
 </RelativeLayout>

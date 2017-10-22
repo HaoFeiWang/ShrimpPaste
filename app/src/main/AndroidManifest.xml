@@ -3,15 +3,16 @@
           package="com.sppe.shrimppaste">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".view.activity.LaunchActivity"
-            android:label="@string/title_activity_launch"
+            android:name=".ui.activity.LaunchActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.activity.HomeActivity" />
+        <activity android:name=".ui.activity.HomeActivity" />
 
     </application>
 

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">ShrimpPaste</string>
-
+    <string name="app_name">虾酱</string>
     <string name="title_activity_launch">LaunchActivity</string>
-    <string name="string_bottom_tab_android">安卓</string>
-    <string name="string_bottom_tab_ios">苹果</string>
-    <string name="string_bottom_tab_girl">妹纸</string>
-    <string name="string_bottom_tab_personal">个人</string>
+
+    <string name="bottom_tab_android">安卓</string>
+    <string name="bottom_tab_ios">苹果</string>
+    <string name="bottom_tab_girl">妹纸</string>
+    <string name="bottom_tab_more">更多</string>
 </resources>
