@@ -1,13 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/fl_fragment_girl"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.sppe.shrimppaste.ui.fragment.GirlFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_girl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="GirlFragment"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
