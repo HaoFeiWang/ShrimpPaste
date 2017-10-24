@@ -1,19 +1,20 @@
 package com.sppe.shrimppaste.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.sppe.shrimppaste.R
+import com.sppe.shrimppaste.net.GlideHelp
 
 /**
  *
  * Created by WangHaoFei on 2017/10/22.
  */
-class GirlAdapter(context: Context,var imageList: ArrayList<Bitmap>): RecyclerView.Adapter<GirlHolder>(){
+class GirlAdapter(val context: Context,var imageList: ArrayList<String>): RecyclerView.Adapter<GirlHolder>(){
 
     val inflater: LayoutInflater = LayoutInflater.from(context)
+    val glideHelp = GlideHelp()
 
     override fun getItemCount(): Int {
         return imageList.size
@@ -24,7 +25,7 @@ class GirlAdapter(context: Context,var imageList: ArrayList<Bitmap>): RecyclerVi
     }
 
     override fun onBindViewHolder(holder: GirlHolder?, position: Int) {
-        holder!!.ivContent.setImageBitmap(imageList[position])
+        glideHelp.fillImage(context,imageList[position],holder!!.ivContent)
     }
 
 }

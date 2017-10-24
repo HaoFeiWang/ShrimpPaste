@@ -14,6 +14,8 @@ import android.view.ViewGroup
 
 import com.sppe.shrimppaste.R
 import com.sppe.shrimppaste.adapter.GirlAdapter
+import com.sppe.shrimppaste.net.GankService
+import com.sppe.shrimppaste.net.GankServiceHelp
 import kotlinx.android.synthetic.main.fragment_girl.*
 
 /**
@@ -22,25 +24,22 @@ import kotlinx.android.synthetic.main.fragment_girl.*
  */
 class GirlFragment : Fragment() {
 
-    lateinit var mImageList: ArrayList<Bitmap>
+    lateinit var mImageList: ArrayList<String>
     lateinit var mAdapter: GirlAdapter
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        mImageList = getData()
-        mAdapter = GirlAdapter(context!!,mImageList)
-        rv_girl.adapter = mAdapter
-        rv_girl.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_girl, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_girl, container, false)
+        val recyclerView = view.findViewById(R.id.rv_girl) as RecyclerView
+        mImageList = getData()
+        mAdapter = GirlAdapter(context!!,mImageList)
+        recyclerView.adapter = mAdapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        return view
     }
 
-    private fun getData(): ArrayList<Bitmap> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun getData(): ArrayList<String> {
+        return GankServiceHelp().getImages(1)
     }
 
 }

@@ -4,10 +4,16 @@
              android:layout_height="match_parent"
              tools:context="com.sppe.shrimppaste.ui.fragment.IosFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
+        android:id="@+id/btn_request"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="IosFragment"/>
+        android:layout_height="wrap_content"
+        android:text="请求数据"/>
+
+    <TextView
+        android:id="@+id/tv_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_request"/>
 
 </FrameLayout>
