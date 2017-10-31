@@ -28,8 +28,8 @@ class GirlAdapter(val context: Context, private var imageUrlList: ArrayList<Stri
         glideHelp.fillImage(context, imageUrlList[position], holder!!.ivContent)
     }
 
-    fun addImageUrl(url: String) {
-        this.imageUrlList.add(url)
+    fun addImageUrl(urlList: ArrayList<String>) {
+        this.imageUrlList.addAll(urlList)
         notifyDataSetChanged()
     }
 

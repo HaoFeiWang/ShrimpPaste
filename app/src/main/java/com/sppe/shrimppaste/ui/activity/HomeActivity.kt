@@ -20,9 +20,9 @@ import kotlinx.android.synthetic.main.activity_home.*
 class HomeActivity : BaseActivity() {
 
     private var fragmentList: Array<Fragment> = arrayOf(
+            GirlFragment(),
             AndroidFragment(),
             IosFragment(),
-            GirlFragment(),
             PersonalFragment()
     )
 
@@ -47,9 +47,9 @@ class HomeActivity : BaseActivity() {
 
     private fun onBottomTabItemClick(item: MenuItem) {
         when (item.itemId) {
-            R.id.item_android -> currentFragment = fragmentList[0]
+            R.id.item_girl -> currentFragment = fragmentList[0]
             R.id.item_ios -> currentFragment = fragmentList[1]
-            R.id.item_girl -> currentFragment = fragmentList[2]
+            R.id.item_android -> currentFragment = fragmentList[2]
             R.id.item_more -> currentFragment = fragmentList[3]
         }
     }

@@ -23,13 +23,18 @@ class GirlFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_girl, container, false)
         val recyclerView = view.findViewById(R.id.rv_girl) as RecyclerView
 
-        val imageUrlList = ArrayList<String>()
-        val adapter = GirlAdapter(context!!, imageUrlList)
-        GirlRequestHelp().getImages(10, adapter)
-
-        recyclerView.adapter = adapter
+        initAdapter(recyclerView)
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         return view
     }
+
+    private fun initAdapter(recyclerView: RecyclerView) {
+        val imageUrlList = ArrayList<String>()
+        val adapter = GirlAdapter(context!!, imageUrlList)
+        recyclerView.adapter = adapter
+
+        GirlRequestHelp().getImages(10, adapter)
+    }
+
 }
