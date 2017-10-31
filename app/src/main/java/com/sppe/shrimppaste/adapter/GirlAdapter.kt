@@ -11,21 +11,26 @@ import com.sppe.shrimppaste.net.GlideHelp
  *
  * Created by WangHaoFei on 2017/10/22.
  */
-class GirlAdapter(val context: Context,var imageList: ArrayList<String>): RecyclerView.Adapter<GirlHolder>(){
+class GirlAdapter(val context: Context, private var imageUrlList: ArrayList<String>) : RecyclerView.Adapter<GirlHolder>() {
 
-    val inflater: LayoutInflater = LayoutInflater.from(context)
-    val glideHelp = GlideHelp()
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private val glideHelp = GlideHelp()
 
     override fun getItemCount(): Int {
-        return imageList.size
+        return imageUrlList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): GirlHolder {
-        return GirlHolder(inflater.inflate(R.layout.item_girl,parent,false))
+        return GirlHolder(inflater.inflate(R.layout.item_girl, parent, false))
     }
 
     override fun onBindViewHolder(holder: GirlHolder?, position: Int) {
-        glideHelp.fillImage(context,imageList[position],holder!!.ivContent)
+        glideHelp.fillImage(context, imageUrlList[position], holder!!.ivContent)
+    }
+
+    fun addImageUrl(url: String) {
+        this.imageUrlList.add(url)
+        notifyDataSetChanged()
     }
 
 }

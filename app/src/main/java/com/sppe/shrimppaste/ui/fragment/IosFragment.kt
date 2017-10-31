@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.sppe.shrimppaste.R
-import com.sppe.shrimppaste.net.GankServiceHelp
 
 /**
  *
@@ -20,7 +19,6 @@ class IosFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val view = inflater!!.inflate(R.layout.fragment_ios, container, false)
-        view.findViewById(R.id.btn_request).setOnClickListener { GankServiceHelp().getImages(10) }
         return view
     }
 

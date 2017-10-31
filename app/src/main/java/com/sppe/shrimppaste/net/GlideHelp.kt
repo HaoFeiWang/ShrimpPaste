@@ -1,6 +1,5 @@
 package com.sppe.shrimppaste.net
 
-import android.app.Fragment
 import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -13,10 +12,10 @@ import com.sppe.shrimppaste.R
  */
 class GlideHelp{
 
-    val options = RequestOptions()
+    private val options = RequestOptions()
             .centerCrop()
-            .placeholder(R.drawable.ic_more)
-            .error(R.drawable.ic_girl)
+            .placeholder(R.drawable.image_erro)
+            .error(R.drawable.image_erro)
             .skipMemoryCache(false)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 
