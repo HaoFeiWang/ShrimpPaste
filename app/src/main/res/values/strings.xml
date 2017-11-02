@@ -6,4 +6,5 @@
     <string name="bottom_tab_ios">苹果</string>
     <string name="bottom_tab_girl">妹纸</string>
     <string name="bottom_tab_more">更多</string>
+    <string name="loading">正在加载...</string>
 </resources>

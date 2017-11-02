@@ -1,5 +1,7 @@
 package com.sppe.shrimppaste.data
 
+import com.j256.ormlite.field.DatabaseField
+
 /**
  * 妹子页面的实体类
  * Created by WangHaoFei on 2017/10/24.
