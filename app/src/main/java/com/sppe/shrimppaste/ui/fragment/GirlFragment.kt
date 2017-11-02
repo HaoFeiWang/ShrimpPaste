@@ -2,6 +2,7 @@ package com.sppe.shrimppaste.ui.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -24,11 +25,14 @@ class GirlFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_girl, container, false)
 
+        val refreshLayout = view.findViewById(R.id.srl_girl) as SwipeRefreshLayout
         val recyclerView = view.findViewById(R.id.rv_girl) as RecyclerView
         initRecyclerView(recyclerView)
+        initRefreshLayout(refreshLayout)
 
         return view
     }
+
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
         val imageUrlList = ArrayList<String>()
@@ -38,5 +42,11 @@ class GirlFragment : Fragment() {
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(GirlItemDecoration(context))
         GirlRequestHelp().getImages(10, adapter)
+    }
+
+    private fun initRefreshLayout(refreshLayout: SwipeRefreshLayout) {
+        refreshLayout.setOnRefreshListener { SwipeRefreshLayout.OnRefreshListener{
+
+        } }
     }
 }
