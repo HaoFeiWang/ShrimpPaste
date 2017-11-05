@@ -29,6 +29,7 @@ class GirlAdapter(val context: Context, private var imageUrlList: ArrayList<Stri
     }
 
     fun addImageUrl(urlList: ArrayList<String>) {
+        this.imageUrlList.clear()
         this.imageUrlList.addAll(urlList)
         notifyDataSetChanged()
     }

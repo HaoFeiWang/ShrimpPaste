@@ -1,5 +1,6 @@
 package com.sppe.shrimppaste.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -14,15 +15,7 @@ import android.view.ViewGroup
 import com.sppe.shrimppaste.R
 import com.sppe.shrimppaste.adapter.GirlAdapter
 import com.sppe.shrimppaste.adapter.GirlItemDecoration
-import com.sppe.shrimppaste.data.PhotoDao
-import com.sppe.shrimppaste.data.PhotoEntry
 import com.sppe.shrimppaste.net.GirlRequestHelp
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
 
 /**
  * 美图页面
@@ -30,70 +23,41 @@ import org.reactivestreams.Subscription
  */
 class GirlFragment : Fragment() {
 
+    val girlRequestHelp = GirlRequestHelp()
+    val imageUrlList = ArrayList<String>()
+    var adapter: GirlAdapter? = null
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_girl, container, false)
 
-        val refreshLayout = view.findViewById(R.id.srl_girl) as SwipeRefreshLayout
         val recyclerView = view.findViewById(R.id.rv_girl) as RecyclerView
+        val refreshLayout = view.findViewById(R.id.srl_girl) as SwipeRefreshLayout
+
         initRecyclerView(recyclerView)
         initRefreshLayout(refreshLayout)
+        refreshLayout.isRefreshing = true
 
         return view
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        adapter = GirlAdapter(context!!, imageUrlList)
+    }
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
-        val imageUrlList = ArrayList<String>()
-        val adapter = GirlAdapter(context!!, imageUrlList)
-
+        Log.e("===", "$context")
         recyclerView.adapter = adapter
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(GirlItemDecoration(context))
 
-        val observer = object : Observer<String> {
-            val list = ArrayList<String>()
-            override fun onNext(t: String) {
-                Log.e("====",t)
-                list.add(t)
-            }
-
-            override fun onError(e: Throwable) {
-                adapter.addImageUrl(list)
-            }
-
-            override fun onSubscribe(d: Disposable) {
-
-            }
-
-            override fun onComplete() {
-                adapter.addImageUrl(list)
-            }
-
-        }
-
-        Observable.create<List<PhotoEntry>> {
-            it.onNext(PhotoDao(context).queryPhotoEntryList())
-            it.onComplete()
-        }.subscribeOn(
-                Schedulers.newThread()
-        ).flatMap<PhotoEntry> {
-            Observable.fromIterable(it)
-        }.map<String> {
-            Log.e("====", it.url)
-            it.url
-        }.observeOn(
-                AndroidSchedulers.mainThread()
-        ).subscribe(observer)
-
-        GirlRequestHelp().getImages(10, context)
+        girlRequestHelp.getDataFromLocal(adapter!!, context)
     }
 
     private fun initRefreshLayout(refreshLayout: SwipeRefreshLayout) {
         refreshLayout.setOnRefreshListener {
-            SwipeRefreshLayout.OnRefreshListener {
-
-            }
+            girlRequestHelp.getImages(10, context, adapter!!)
         }
     }
 }
