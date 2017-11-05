@@ -8,19 +8,19 @@
     android:layout_height="match_parent"
     tools:context="com.sppe.shrimppaste.ui.activity.HomeActivity">
 
-    <RelativeLayout
-        android:id="@+id/rl_home_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bnv_home_bottom"/>
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bnv_home_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_bottom_height"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/home_bottom_navigition"
-        android:visibility="visible"/>
+        app:menu="@menu/home_bottom_navigition"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_home_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bnv_home_bottom"/>
+
 
     <View
         android:layout_width="match_parent"

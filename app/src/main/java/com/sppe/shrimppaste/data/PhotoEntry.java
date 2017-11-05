@@ -9,7 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "tb_photo")
 public class PhotoEntry {
 
-    @DatabaseField
+    @DatabaseField(uniqueIndex = true)
     private String _id;
     private String createAt;
     @DatabaseField

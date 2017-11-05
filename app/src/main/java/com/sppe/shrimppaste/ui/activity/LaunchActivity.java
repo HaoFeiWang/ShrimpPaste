@@ -23,6 +23,7 @@ public class LaunchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LaunchActivity.this,HomeActivity.class));
+                LaunchActivity.this.finish();
             }
         });
     }

@@ -1,8 +1,8 @@
 package com.sppe.shrimppaste.ui.activity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,53 +21,60 @@ import com.sppe.shrimppaste.ui.fragment.PersonalFragment;
 public class HomeActivity extends AppCompatActivity {
 
     private Fragment[] fragmentList;
-    private Fragment currentFragment;
+    private int currentPosition;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initFragmentList();
         initNavigationView();
     }
 
     private void initFragmentList() {
-        fragmentList = new Fragment[3];
+        fragmentList = new Fragment[4];
         fragmentList[0] = new GirlFragment();
         fragmentList[1] = new AndroidFragment();
         fragmentList[2] = new IosFragment();
         fragmentList[3] = new PersonalFragment();
 
-        currentFragment = fragmentList[0];
+        currentPosition = 0;
     }
 
 
     private void initNavigationView() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bnv_home_bottom);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.rl_home_content, fragmentList[0]).commit();
+                .add(R.id.rl_home_content, fragmentList[currentPosition]).commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         onBottomTabItemClick(item);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.rl_home_content, currentFragment).commit();
+                                .replace(R.id.rl_home_content, fragmentList[currentPosition]).commit();
                         return true;
                     }
-                });
+                }
+        );
     }
 
     private void onBottomTabItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_girl:
-                currentFragment = fragmentList[0];
-            case R.id.item_ios:
-                currentFragment = fragmentList[1];
+                currentPosition = 0;
+                break;
             case R.id.item_android:
-                currentFragment = fragmentList[2];
+                currentPosition = 1;
+                break;
+            case R.id.item_ios:
+                currentPosition = 2;
+                break;
             case R.id.item_more:
-                currentFragment = fragmentList[3];
+                currentPosition = 3;
+                break;
+            default:
+                break;
         }
     }
 

@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.sppe.shrimppaste.ui.fragment.GirlFragment">
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.sppe.shrimppaste.ui.view.RefreshLayout
         android:id="@+id/srl_girl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,5 +12,5 @@
             android:id="@+id/rv_girl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.sppe.shrimppaste.ui.view.RefreshLayout>
 </RelativeLayout>
