@@ -13,9 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.sppe.shrimppaste.R
-import com.sppe.shrimppaste.adapter.GirlAdapter
-import com.sppe.shrimppaste.adapter.GirlItemDecoration
-import com.sppe.shrimppaste.net.GirlRequestHelp
 
 /**
  * 美图页面

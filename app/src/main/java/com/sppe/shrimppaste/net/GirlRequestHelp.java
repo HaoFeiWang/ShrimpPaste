@@ -1,26 +1,10 @@
-package com.sppe.shrimppaste.net
-
-import android.content.Context
-import android.support.v4.widget.SwipeRefreshLayout
-import android.util.Log
-import com.sppe.shrimppaste.adapter.GirlAdapter
-import com.sppe.shrimppaste.constant.BASE_GANK_URL
-import com.sppe.shrimppaste.data.PhotoDao
-import com.sppe.shrimppaste.data.PhotoEntry
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+package com.sppe.shrimppaste.net;
 
 /**
- *
- * Created by WangHaoFei on 2017/10/22.
+ * Created by WHF on 2017/11/5.
  */
-class GirlRequestHelp {
+
+public class GirlRequestHelp {
 
     private val retrofit = Retrofit.Builder()
             .baseUrl(BASE_GANK_URL)
@@ -37,14 +21,14 @@ class GirlRequestHelp {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap {
-                    Observable.fromIterable(it.results) }
-                .subscribe {
-                    Log.e("===","111")
-                    Log.e("===","${it}")
-                    PhotoDao(context).addPhotoEntryList(it)
-                    getDataFromLocal(adapter,context)
-                    Log.e("===","停止刷新")
-                }
+            Observable.fromIterable(it.results) }
+        .subscribe {
+            Log.e("===","111")
+            Log.e("===","${it}")
+            PhotoDao(context).addPhotoEntryList(it)
+            getDataFromLocal(adapter,context)
+            Log.e("===","停止刷新")
+        }
     }
 
 
@@ -78,8 +62,4 @@ class GirlRequestHelp {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer)
     }
-
-
 }
-
-
