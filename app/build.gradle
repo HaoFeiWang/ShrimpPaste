@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: "kotlin-android-extensions"
+apply plugin: 'kotlin-noarg'
+apply plugin: 'kotlin-allopen'
+
+noArg {
+    annotation("com.sppe.shrimppaste.annotations.Poko")
+}
+allOpen {
+    annotation("com.sppe.shrimppaste.annotations.Poko")
+}
 
 android {
     compileSdkVersion 25
@@ -19,6 +28,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {

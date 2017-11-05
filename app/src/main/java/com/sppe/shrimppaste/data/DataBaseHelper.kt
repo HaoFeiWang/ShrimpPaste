@@ -15,9 +15,10 @@ import java.util.HashMap
  * Created by @author WangHaoFei on 2017/11/3.
  */
 
-class DataBaseHelper private constructor(context: Context) : OrmLiteSqliteOpenHelper(context, DATA_NAME, null, DATA_VERSION) {
+class DataBaseHelper private constructor(context: Context) :
+        OrmLiteSqliteOpenHelper(context, DATA_NAME, null, DATA_VERSION) {
 
-    private val daoMap = HashMap<String, Dao<*, *>>()
+    private val daoMap = HashMap<String, Dao<*,Int>>()
 
     override fun onCreate(database: SQLiteDatabase, connectionSource: ConnectionSource) {
         try {
@@ -28,7 +29,8 @@ class DataBaseHelper private constructor(context: Context) : OrmLiteSqliteOpenHe
 
     }
 
-    override fun onUpgrade(database: SQLiteDatabase, connectionSource: ConnectionSource, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(database: SQLiteDatabase, connectionSource: ConnectionSource,
+                           oldVersion: Int, newVersion: Int) {
         try {
             TableUtils.dropTable<PhotoEntry, Any>(connectionSource, PhotoEntry::class.java, true)
             onCreate(database, connectionSource)
@@ -39,12 +41,11 @@ class DataBaseHelper private constructor(context: Context) : OrmLiteSqliteOpenHe
     }
 
     @Synchronized
-    @Throws(SQLException::class)
-    fun getDaoForClass(clazz: Class<*>): Dao<*, *> {
-        var dao: Dao<*, *>? = null
+    fun <T> getDaoForClass(clazz: Class<T>): Dao<T, Int> {
+        var dao: Dao<T, Int>? = null
         val className = clazz.simpleName
         if (daoMap.containsKey(className)) {
-            dao = daoMap[className]
+            dao = daoMap[className] as Dao<T, Int>
         }
         if (dao == null) {
             dao = super.getDao(clazz)

@@ -1,6 +1,7 @@
 package com.sppe.shrimppaste.data
 
 import com.j256.ormlite.field.DatabaseField
+import com.sppe.shrimppaste.annotations.Poko
 import com.j256.ormlite.table.DatabaseTable
 
 /**
@@ -9,15 +10,15 @@ import com.j256.ormlite.table.DatabaseTable
  */
 data class GirlResult(val error: Boolean, val results: List<PhotoEntry>)
 
-
 @DatabaseTable(tableName = "table_photo")
-data class PhotoEntry(@DatabaseField val _id: String,
-                      @DatabaseField val createAt: String,
-                      @DatabaseField val desc: String,
-                      @DatabaseField val publishedAt: String,
-                      @DatabaseField val source: String,
-                      @DatabaseField val type: String,
-                      @DatabaseField val url: String,
-                      @DatabaseField val used: Boolean,
-                      @DatabaseField val who: String)
+@Poko
+data class PhotoEntry(@DatabaseField var _id: String,
+                      @DatabaseField var createAt: String,
+                      @DatabaseField var desc: String,
+                      @DatabaseField var publishedAt: String,
+                      @DatabaseField var source: String,
+                      @DatabaseField var type: String,
+                      @DatabaseField var url: String,
+                      @DatabaseField var used: Boolean,
+                      @DatabaseField var who: String)
 

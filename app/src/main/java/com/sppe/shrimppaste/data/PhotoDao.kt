@@ -1,9 +1,8 @@
 package com.sppe.shrimppaste.data
 
 import android.content.Context
-
+import android.util.Log
 import com.j256.ormlite.dao.Dao
-
 import java.sql.SQLException
 
 /**
@@ -12,17 +11,18 @@ import java.sql.SQLException
 
 class PhotoDao(val context: Context) {
 
-    val dao = DataBaseHelper.getInstance(context).getDaoForClass(PhotoEntry::class.java)
+    val dao: Dao<PhotoEntry, Int> = DataBaseHelper.getInstance(context).getDaoForClass(PhotoEntry::class.java)
 
-    fun addPhotoEntryList(photoList: Collection<PhotoEntry>) {
+    fun addPhotoEntryList(photo: PhotoEntry) {
         try {
-            dao.create(photoList)
+            dao.create(photo)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
     }
 
-    fun queryPhotoEntryList() {
-
+    fun queryPhotoEntryList(): List<PhotoEntry> {
+        val list = dao.queryForAll()
+        return list
     }
 }
