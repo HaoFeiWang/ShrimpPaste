@@ -11,11 +11,35 @@ import android.view.ViewGroup;
  * Created by WHF on 2017/11/5.
  */
 
-public class BaseMvpFragment extends Fragment {
+public abstract class BaseMvpFragment<V extends BaseMvpView, P extends BaseMvpPresent<V>>
+        extends Fragment implements BaseMvpView {
+
+    protected P present;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (present == null){
+            present = createPresent();
+        }
+        if (present != null) {
+            present.attachView((V) this);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        present.detachView();
+    }
+
+    public abstract P createPresent();
 }

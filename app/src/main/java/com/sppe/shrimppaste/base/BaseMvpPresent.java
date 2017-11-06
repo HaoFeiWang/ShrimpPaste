@@ -6,7 +6,7 @@ package com.sppe.shrimppaste.base;
 
 public class BaseMvpPresent<V extends BaseMvpView>{
 
-    private V view;
+    protected V view;
 
     public void attachView(V view){
         this.view = view;

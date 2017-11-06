@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.net.GlideHelp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +26,12 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
     public GirlAdapter(Context context, List<String> imageUrlList){
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.imageUrlList = imageUrlList;
         this.glideHelp = new GlideHelp();
+        if (imageUrlList == null){
+            this.imageUrlList = new ArrayList<>();
+        }else {
+            this.imageUrlList = imageUrlList;
+        }
     }
 
     @Override
@@ -44,7 +49,7 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
         return imageUrlList.size();
     }
 
-    public void addImageUrl(List<String> imageUrlList) {
+    public void setUrlList(List<String> imageUrlList) {
         this.imageUrlList.clear();
         this.imageUrlList.addAll(imageUrlList);
         notifyDataSetChanged();

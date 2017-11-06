@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 public abstract class BaseMvpActivity<V extends BaseMvpView,P extends BaseMvpPresent<V>>
         extends AppCompatActivity implements BaseMvpView {
 
-    private P present;
+    protected P present;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

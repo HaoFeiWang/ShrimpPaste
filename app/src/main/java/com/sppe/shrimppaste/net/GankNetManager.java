@@ -79,7 +79,7 @@ public class GankNetManager implements GankNetService {
 
             @Override
             public void onComplete() {
-                adapter.addImageUrl(imageUrlList);
+                adapter.setUrlList(imageUrlList);
             }
         };
 
