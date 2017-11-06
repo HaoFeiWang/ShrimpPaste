@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.adapter.GirlAdapter;
 import com.sppe.shrimppaste.adapter.GirlItemDecoration;
-import com.sppe.shrimppaste.net.GankHttpManager;
+import com.sppe.shrimppaste.net.GankNetManager;
 import com.sppe.shrimppaste.ui.view.RefreshLayout;
 
 import java.util.ArrayList;
@@ -57,8 +57,8 @@ public class GirlFragment extends Fragment {
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new GirlItemDecoration(getContext()));
 
-        GankHttpManager.getInstance().getDataFromLocal(adapter,getContext());
-        GankHttpManager.getInstance().getImages(10,getContext(),adapter);
+        GankNetManager.getInstance().getDataFromLocal(adapter,getContext());
+        GankNetManager.getInstance().getImages(10,getContext(),adapter);
     }
 
     private void initRefreshLayout() {

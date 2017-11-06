@@ -1,4 +1,4 @@
-package com.sppe.shrimppaste.data;
+package com.sppe.shrimppaste.data.dao;
 
 import android.content.Context;
 
@@ -19,8 +19,7 @@ public class PhotoDao {
         dao = DatabaseHelp.getInstance(context).getDao(PhotoEntry.class);
     }
 
-
-    public void addPhotoEntryList(PhotoEntry photo) {
+    public void addPhotoEntryList(List<PhotoEntry> photo) {
         try {
             dao.create(photo);
         } catch (SQLException e) {

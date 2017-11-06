@@ -3,13 +3,12 @@ package com.sppe.shrimppaste.net;
 import android.content.Context;
 
 import com.sppe.shrimppaste.adapter.GirlAdapter;
-import com.sppe.shrimppaste.data.GirlResult;
-import com.sppe.shrimppaste.data.PhotoDao;
-import com.sppe.shrimppaste.data.PhotoEntry;
+import com.sppe.shrimppaste.net.bean.GirlResult;
+import com.sppe.shrimppaste.data.dao.PhotoDao;
+import com.sppe.shrimppaste.data.dao.PhotoEntry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -19,7 +18,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -30,71 +28,33 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by WHF on 2017/11/5.
  */
 
-public class GankHttpManager {
+public class GankNetManager implements GankNetService {
 
     private static final String BASE_GANK_URL = "http://gank.io/api/";
 
     private Retrofit retrofit;
-    private GankService gankService;
+    private GankNetService gankService;
 
-    private static GankHttpManager gankHttpManager;
+    private static GankNetManager gankNetManager;
 
-    private GankHttpManager() {
+    private GankNetManager() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_GANK_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        gankService = retrofit.create(GankService.class);
+        gankService = retrofit.create(GankNetService.class);
     }
 
-    public static GankHttpManager getInstance() {
-        if (gankHttpManager == null) {
-            synchronized (GankHttpManager.class) {
-                if (gankHttpManager == null) {
-                    gankHttpManager = new GankHttpManager();
+    public static GankNetManager getInstance() {
+        if (gankNetManager == null) {
+            synchronized (GankNetManager.class) {
+                if (gankNetManager == null) {
+                    gankNetManager = new GankNetManager();
                 }
             }
         }
-        return gankHttpManager;
-    }
-
-
-    public void getImages(int page, final Context context, final GirlAdapter adapter) {
-
-        Observer<PhotoEntry> observer = new Observer<PhotoEntry>() {
-            PhotoDao dao = new PhotoDao(context);
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@NonNull PhotoEntry photoEntry) {
-                dao.addPhotoEntryList(photoEntry);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                getDataFromLocal(adapter,context);
-            }
-        };
-
-        gankService.getGirl(page)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<GirlResult, ObservableSource<PhotoEntry>>() {
-                    @Override
-                    public ObservableSource<PhotoEntry> apply(@NonNull GirlResult girlResult) throws Exception {
-                        return Observable.fromIterable(girlResult.getResults());
-                    }
-                })
-                .subscribe(observer);
+        return gankNetManager;
     }
 
 
@@ -147,5 +107,20 @@ public class GankHttpManager {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+    }
+
+    @Override
+    public Observable<GirlResult> getGirl(int page) {
+        return gankService.getGirl(page);
+    }
+
+    @Override
+    public List<GirlResult> getAndroid(int page) {
+        return gankService.getAndroid(page);
+    }
+
+    @Override
+    public List<GirlResult> getIos(int page) {
+        return gankService.getIos(page);
     }
 }

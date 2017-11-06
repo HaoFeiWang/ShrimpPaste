@@ -1,4 +1,4 @@
-package com.sppe.shrimppaste.data;
+package com.sppe.shrimppaste.data.dao;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * Created by WHF on 2017/11/5.
  */
 
-public class BaseFragment extends Fragment {
+public class BaseMvpFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container

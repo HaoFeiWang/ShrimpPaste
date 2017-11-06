@@ -2,7 +2,7 @@ package com.sppe.shrimppaste;
 
 import android.app.Application;
 
-import com.sppe.shrimppaste.data.DatabaseHelp;
+import com.sppe.shrimppaste.data.dao.DatabaseHelp;
 
 /**
  * Created by WHF on 2017/11/5.

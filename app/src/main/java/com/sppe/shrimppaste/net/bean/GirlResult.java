@@ -1,4 +1,6 @@
-package com.sppe.shrimppaste.data;
+package com.sppe.shrimppaste.net.bean;
+
+import com.sppe.shrimppaste.data.dao.PhotoEntry;
 
 import java.util.List;
 
