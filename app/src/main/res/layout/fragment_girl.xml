@@ -1,10 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/fl_fragment_girl"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.sppe.shrimppaste.ui.fragment.GirlFragment">
-    <com.sppe.shrimppaste.ui.view.RefreshLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fl_fragment_girl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.sppe.shrimppaste.ui.fragment.GirlFragment">
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_girl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,5 +13,5 @@
             android:id="@+id/rv_girl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </com.sppe.shrimppaste.ui.view.RefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
