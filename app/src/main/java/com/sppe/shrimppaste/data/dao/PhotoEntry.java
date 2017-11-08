@@ -98,4 +98,19 @@ public class PhotoEntry {
     public void setWho(String who) {
         this.who = who;
     }
+
+    @Override
+    public String toString() {
+        return "PhotoEntry{" +
+                "_id='" + _id + '\'' +
+                ", createAt='" + createAt + '\'' +
+                ", desc='" + desc + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", source='" + source + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", Boolean='" + Boolean + '\'' +
+                ", who='" + who + '\'' +
+                '}';
+    }
 }

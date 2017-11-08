@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 
 public interface GankService {
 
-    Observable<List<PhotoEntry>> getGirl(int page);
+    Observable<List<PhotoEntry>> getNetGirl(int page);
+
+    Observable<List<PhotoEntry>> getDbGirl();
 
 }

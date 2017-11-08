@@ -1,10 +1,12 @@
 package com.sppe.shrimppaste.data.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +31,11 @@ public class PhotoDao {
 
     public List<PhotoEntry> queryPhotoEntryList(){
         try {
-            return dao.queryForAll();
+            List<PhotoEntry> photoEntrieList = dao.queryForAll();
+            return photoEntrieList;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 }

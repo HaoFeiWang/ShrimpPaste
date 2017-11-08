@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.net.GlideHelp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by WHF on 2017/11/5.
  */
 
-public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
+public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
 
     private Context context;
     private LayoutInflater inflater;
@@ -22,11 +23,15 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
     private GlideHelp glideHelp;
 
 
-    public GirlAdapter(Context context, List<String> imageUrlList){
+    public GirlAdapter(Context context, List<String> imageUrlList) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.imageUrlList = imageUrlList;
         this.glideHelp = new GlideHelp();
+        if (imageUrlList == null) {
+            this.imageUrlList = new ArrayList<>();
+        } else {
+            this.imageUrlList = imageUrlList;
+        }
     }
 
     @Override
@@ -36,7 +41,9 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
 
     @Override
     public void onBindViewHolder(GirlHolder holder, int position) {
-        glideHelp.fillImage(context, imageUrlList.get(position), holder.ivContent);
+        if (imageUrlList.size() > position) {
+            glideHelp.fillImage(context, imageUrlList.get(position), holder.ivContent);
+        }
     }
 
     @Override
@@ -44,9 +51,8 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder>{
         return imageUrlList.size();
     }
 
-    public void addImageUrl(List<String> imageUrlList) {
+    public void setUrlList(List<String> imageUrlList) {
         this.imageUrlList.clear();
         this.imageUrlList.addAll(imageUrlList);
-        notifyDataSetChanged();
     }
 }
