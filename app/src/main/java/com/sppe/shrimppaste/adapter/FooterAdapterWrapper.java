@@ -20,10 +20,17 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
 
+    public static final int STATE_START = 1;
+    public static final int STATE_LOADING = 2;
+    public static final int STATE_COMPLETE = 3;
+
+
     private RecyclerView.Adapter adapter;
+    private int currentState;
 
     public FooterAdapterWrapper(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
+        this.currentState = STATE_COMPLETE;
     }
 
     @Override
@@ -47,7 +54,11 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FooterHolder) {
-
+            if (currentState == STATE_COMPLETE){
+                ((FooterHolder) holder).itemView.setVisibility(View.GONE);
+            }else {
+                ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
+            }
         } else {
             adapter.onBindViewHolder(holder, position);
         }
@@ -66,7 +77,6 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            Log.e("===","true");
             final GridLayoutManager manager = (GridLayoutManager) layoutManager;
             manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -74,9 +84,16 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
                     return getItemViewType(position) == TYPE_FOOTER ? manager.getSpanCount() : 1;
                 }
             });
-        }else {
-            Log.e("===","false");
         }
+    }
+
+    public void setCurrentState(int state){
+        this.currentState = state;
+    }
+
+    public void setAdapter(RecyclerView.Adapter adapter){
+        this.adapter = adapter;
+        notifyDataSetChanged();
     }
 
 

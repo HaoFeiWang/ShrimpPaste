@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         recyclerView.addOnScrollListener(new FooterRecyclerScrollListener() {
             @Override
             public void onLoadMore() {
+//                footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_LOADING);
                 present.refreshDataFromNet(++currentPage);
             }
         });
@@ -96,9 +98,12 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     public void refreshData(List<String> urlList) {
         this.imageUrlList = urlList;
         adapter.setUrlList(urlList);
-//        adapter.notifyDataSetChanged();
-        footerAdapter.notifyDataSetChanged();
-        recyclerView.invalidate();
+        for (String str : urlList) {
+            Log.e("==主界面==", str);
+        }
+        Log.e("=====","数据刷新了");
+        footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
+        footerAdapter.setAdapter(new GirlAdapter(getContext(),urlList));
     }
 
     @Override
