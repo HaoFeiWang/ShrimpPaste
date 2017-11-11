@@ -36,6 +36,7 @@ public class GirlItemDecoration extends RecyclerView.ItemDecoration {
         super.onDraw(c, parent, state);
         int count = parent.getChildCount();
         int index = 0;
+        //-1是Footer的原因,Footer部分不做任何绘制
         while (index < count - 1) {
             View view = parent.getChildAt(index);
             float left = view.getLeft();
@@ -43,9 +44,15 @@ public class GirlItemDecoration extends RecyclerView.ItemDecoration {
             float right = view.getRight();
             float bottom = view.getBottom();
 
+            //底部紧挨Footer的Item不做下方线绘制
+            if (index != count - 2 && index != count - 3) {
+                //下
+                c.drawRect(left - leftMargin, bottom, right + rightMargin, bottom + bottomMargin, paint);
+            }
+            //左
             c.drawRect(left - leftMargin, top, left, bottom, paint);
+            //右
             c.drawRect(right, top, right + rightMargin, bottom, paint);
-            c.drawRect(left - leftMargin, bottom, right + rightMargin, bottom + bottomMargin, paint);
             ++index;
         }
     }
