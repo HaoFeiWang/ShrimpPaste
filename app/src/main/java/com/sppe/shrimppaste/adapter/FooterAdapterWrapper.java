@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.sppe.shrimppaste.R;
 
+import java.util.List;
+
 
 /**
  * 上拉刷新的Adapter的包装类
@@ -35,7 +37,7 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (position + 1 == getItemCount()) {
+        if (position > 1 && position + 1 == getItemCount()) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -54,11 +56,7 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FooterHolder) {
-            if (currentState == STATE_COMPLETE){
-                ((FooterHolder) holder).itemView.setVisibility(View.GONE);
-            }else {
-                ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
-            }
+            ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
         } else {
             adapter.onBindViewHolder(holder, position);
         }
@@ -87,14 +85,13 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void setCurrentState(int state){
+    public void setCurrentState(int state) {
         this.currentState = state;
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter){
+    public void setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         notifyDataSetChanged();
     }
-
 
 }

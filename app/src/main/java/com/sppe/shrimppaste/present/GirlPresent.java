@@ -78,26 +78,20 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
         Observer<List<String>> observer = new Observer<List<String>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-
             }
 
             @Override
             public void onNext(@NonNull List<String> urlList) {
-                for (String str : urlList) {
-                    Log.e("==网络==", str);
-                }
                 view.refreshData(urlList);
                 view.stopRefreshing();
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-
             }
 
             @Override
             public void onComplete() {
-
             }
         };
 

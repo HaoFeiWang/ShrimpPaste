@@ -31,8 +31,7 @@ public class PhotoDao {
 
     public List<PhotoEntry> queryPhotoEntryList(){
         try {
-            List<PhotoEntry> photoEntrieList = dao.queryForAll();
-            return photoEntrieList;
+            return dao.queryBuilder().orderBy("publishedAt", false).query();
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<>();

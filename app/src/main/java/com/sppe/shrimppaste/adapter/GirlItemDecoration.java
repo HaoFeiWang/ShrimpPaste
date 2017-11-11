@@ -36,7 +36,7 @@ public class GirlItemDecoration extends RecyclerView.ItemDecoration {
         super.onDraw(c, parent, state);
         int count = parent.getChildCount();
         int index = 0;
-        while (index < count) {
+        while (index < count - 1) {
             View view = parent.getChildAt(index);
             float left = view.getLeft();
             float top = view.getTop();

@@ -31,6 +31,8 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
     private static final String TAG = GirlFragment.class.getSimpleName();
 
+    private static final int START_PAGE = 1;
+
     private View view;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
@@ -39,7 +41,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     private GirlAdapter adapter;
     private FooterAdapterWrapper footerAdapter;
 
-    private int currentPage = 1;
+    private int currentPage = START_PAGE;
 
     @Nullable
     @Override
@@ -72,12 +74,11 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         adapter = new GirlAdapter(getContext(), imageUrlList);
         footerAdapter = new FooterAdapterWrapper(adapter);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(footerAdapter);
         recyclerView.addItemDecoration(new GirlItemDecoration(getContext()));
         setScrollListener();
 
-//        present.refreshDataFromNet(currentPage);
         present.refreshDataFromDb();
     }
 
@@ -85,25 +86,30 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         recyclerView.addOnScrollListener(new FooterRecyclerScrollListener() {
             @Override
             public void onLoadMore() {
-//                footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_LOADING);
                 present.refreshDataFromNet(++currentPage);
             }
         });
     }
 
     private void initRefreshLayout() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                present.refreshDataFromNet(START_PAGE);
+            }
+        });
     }
 
     @Override
     public void refreshData(List<String> urlList) {
         this.imageUrlList = urlList;
+
         adapter.setUrlList(urlList);
-        for (String str : urlList) {
-            Log.e("==主界面==", str);
-        }
-        Log.e("=====","数据刷新了");
         footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
-        footerAdapter.setAdapter(new GirlAdapter(getContext(),urlList));
+        footerAdapter.setAdapter(adapter);
+        if (urlList.size() == 0) {
+            present.refreshDataFromNet(currentPage);
+        }
     }
 
     @Override

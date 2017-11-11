@@ -52,7 +52,6 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
     }
 
     public void setUrlList(List<String> imageUrlList) {
-        this.imageUrlList.clear();
-        this.imageUrlList.addAll(imageUrlList);
+        this.imageUrlList = imageUrlList;
     }
 }

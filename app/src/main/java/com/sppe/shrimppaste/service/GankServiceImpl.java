@@ -31,15 +31,14 @@ public class GankServiceImpl implements GankService {
     }
 
     @Override
-    public Observable<List<PhotoEntry>> getNetGirl(int page) {
+    public Observable<List<PhotoEntry>> getNetGirl(final int page) {
         return GankNetManager.getInstance().getGirl(page)
                 .map(new Function<GirlResult, List<PhotoEntry>>() {
                     @Override
                     public List<PhotoEntry> apply(@NonNull GirlResult girlResult) throws Exception {
                         List<PhotoEntry> photoEntryList = girlResult.getResults();
-                        Log.i(TAG,photoEntryList.toString());
                         photoDao.addPhotoEntryList(photoEntryList);
-                        return photoEntryList;
+                        return photoDao.queryPhotoEntryList();
                     }
                 }).subscribeOn(Schedulers.newThread());
     }
