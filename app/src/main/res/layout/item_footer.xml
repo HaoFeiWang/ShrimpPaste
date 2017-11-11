@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:gravity="center_horizontal">
+    android:layout_height="25dp"
+    android:gravity="center_horizontal"
+    android:background="@color/divide">
 
     <ProgressBar
         android:id="@+id/pb_item_footer"
@@ -17,5 +18,6 @@
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/pb_item_footer"
         android:gravity="center_vertical"
+        android:textSize="13sp"
         android:text="正在加载..." />
 </RelativeLayout>

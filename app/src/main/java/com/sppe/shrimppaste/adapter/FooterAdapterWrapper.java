@@ -56,7 +56,12 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FooterHolder) {
-            ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
+            if (currentState == STATE_LOADING) {
+                ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
+            }else {
+                Log.e("====","隐藏Footer");
+                ((FooterHolder) holder).itemView.setVisibility(View.GONE);
+            }
         } else {
             adapter.onBindViewHolder(holder, position);
         }
@@ -91,7 +96,6 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
 
     public void setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
-        notifyDataSetChanged();
     }
 
 }

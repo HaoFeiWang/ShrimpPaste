@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,6 +85,8 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         recyclerView.addOnScrollListener(new FooterRecyclerScrollListener() {
             @Override
             public void onLoadMore() {
+                footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_LOADING);
+                footerAdapter.notifyDataSetChanged();
                 present.refreshDataFromNet(++currentPage);
             }
         });
@@ -107,6 +108,8 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         adapter.setUrlList(urlList);
         footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
         footerAdapter.setAdapter(adapter);
+        footerAdapter.notifyDataSetChanged();
+        Log.e("====","刷新数据");
         if (urlList.size() == 0) {
             present.refreshDataFromNet(currentPage);
         }
