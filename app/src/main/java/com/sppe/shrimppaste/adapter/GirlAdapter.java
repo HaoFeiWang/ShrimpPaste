@@ -3,6 +3,7 @@ package com.sppe.shrimppaste.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.sppe.shrimppaste.R;
@@ -21,6 +22,7 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
     private LayoutInflater inflater;
     private List<String> imageUrlList;
     private GlideHelp glideHelp;
+    private OnItemClickListener onItemClickListener;
 
 
     public GirlAdapter(Context context, List<String> imageUrlList) {
@@ -40,10 +42,20 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
     }
 
     @Override
-    public void onBindViewHolder(GirlHolder holder, int position) {
+    public void onBindViewHolder(GirlHolder holder,int position) {
+        final int index = position;
         if (imageUrlList.size() > position) {
             glideHelp.fillImage(context, imageUrlList.get(position), holder.ivContent);
         }
+
+        holder.ivContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener!=null){
+                    onItemClickListener.onItemClick(index);
+                }
+            }
+        });
     }
 
     @Override
@@ -53,5 +65,13 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
 
     public void setUrlList(List<String> imageUrlList) {
         this.imageUrlList = imageUrlList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
     }
 }

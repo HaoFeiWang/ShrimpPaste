@@ -61,7 +61,7 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
             }
         };
 
-        serviceImpl.getDbGirl().map(new Function<List<PhotoEntry>, List<String>>() {
+        serviceImpl.getDbGirlList().map(new Function<List<PhotoEntry>, List<String>>() {
             @Override
             public List<String> apply(@NonNull List<PhotoEntry> photoEntries) throws Exception {
                 List<String> list = new ArrayList<>();

@@ -8,6 +8,7 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by WHF on 2017/11/5.
@@ -35,6 +36,22 @@ public class PhotoDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public PhotoEntry queryRandowPhotoEntry(){
+        try {
+            List<PhotoEntry> photoEntryList = dao.queryForAll();
+            int size = photoEntryList.size();
+            Random random = new Random();
+            int position = random.nextInt(size) - 1;
+            if (position < 0){
+                return null;
+            }
+            return photoEntryList.get(position);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
