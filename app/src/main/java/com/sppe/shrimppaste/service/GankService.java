@@ -15,6 +15,8 @@ public interface GankService {
 
     Observable<List<PhotoEntry>> getNetGirl(int page);
 
-    Observable<List<PhotoEntry>> getDbGirl();
+    Observable<List<PhotoEntry>> getDbGirlList();
+
+    Observable<PhotoEntry> getRandowDbGirl();
 
 }

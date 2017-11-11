@@ -10,6 +10,7 @@ import com.sppe.shrimppaste.net.GankNetManager;
 import com.sppe.shrimppaste.net.bean.GirlResult;
 
 import java.util.List;
+import java.util.Observer;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
@@ -31,24 +32,32 @@ public class GankServiceImpl implements GankService {
     }
 
     @Override
-    public Observable<List<PhotoEntry>> getNetGirl(int page) {
+    public Observable<List<PhotoEntry>> getNetGirl(final int page) {
         return GankNetManager.getInstance().getGirl(page)
                 .map(new Function<GirlResult, List<PhotoEntry>>() {
                     @Override
                     public List<PhotoEntry> apply(@NonNull GirlResult girlResult) throws Exception {
                         List<PhotoEntry> photoEntryList = girlResult.getResults();
-                        Log.i(TAG,photoEntryList.toString());
                         photoDao.addPhotoEntryList(photoEntryList);
-                        return photoEntryList;
+                        return photoDao.queryPhotoEntryList();
                     }
                 }).subscribeOn(Schedulers.newThread());
     }
 
-    public Observable<List<PhotoEntry>> getDbGirl() {
+    public Observable<List<PhotoEntry>> getDbGirlList() {
         return Observable.just(true).map(new Function<Boolean, List<PhotoEntry>>() {
             @Override
             public List<PhotoEntry> apply(@NonNull Boolean b) throws Exception {
                 return photoDao.queryPhotoEntryList();
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+
+    public Observable<PhotoEntry> getRandowDbGirl() {
+        return Observable.just(true).map(new Function<Boolean, PhotoEntry>() {
+            @Override
+            public PhotoEntry apply(@NonNull Boolean b) throws Exception {
+                return photoDao.queryRandowPhotoEntry();
             }
         }).subscribeOn(Schedulers.newThread());
     }

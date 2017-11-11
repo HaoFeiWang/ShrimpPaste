@@ -1,24 +1,33 @@
 package com.sppe.shrimppaste.ui.fragment;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.adapter.FooterAdapterWrapper;
 import com.sppe.shrimppaste.adapter.FooterRecyclerScrollListener;
 import com.sppe.shrimppaste.adapter.GirlAdapter;
 import com.sppe.shrimppaste.adapter.GirlItemDecoration;
 import com.sppe.shrimppaste.base.BaseMvpFragment;
+import com.sppe.shrimppaste.data.contacts.Contacts;
+import com.sppe.shrimppaste.net.GlideHelp;
 import com.sppe.shrimppaste.present.GirlPresent;
+import com.sppe.shrimppaste.ui.activity.PhotoActivity;
 import com.sppe.shrimppaste.ui.view.GirlView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +39,8 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
     private static final String TAG = GirlFragment.class.getSimpleName();
 
+    private static final int START_PAGE = 1;
+
     private View view;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
@@ -38,7 +49,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     private GirlAdapter adapter;
     private FooterAdapterWrapper footerAdapter;
 
-    private int currentPage = 1;
+    private int currentPage = START_PAGE;
 
     @Nullable
     @Override
@@ -69,14 +80,14 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
         imageUrlList = new ArrayList<>();
         adapter = new GirlAdapter(getContext(), imageUrlList);
+        setOnItemClickListener(adapter);
         footerAdapter = new FooterAdapterWrapper(adapter);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(footerAdapter);
         recyclerView.addItemDecoration(new GirlItemDecoration(getContext()));
         setScrollListener();
 
-//        present.refreshDataFromNet(currentPage);
         present.refreshDataFromDb();
     }
 
@@ -84,25 +95,54 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         recyclerView.addOnScrollListener(new FooterRecyclerScrollListener() {
             @Override
             public void onLoadMore() {
+                footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_LOADING);
+                footerAdapter.notifyDataSetChanged();
                 present.refreshDataFromNet(++currentPage);
             }
         });
     }
 
     private void initRefreshLayout() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                present.refreshDataFromNet(START_PAGE);
+            }
+        });
     }
 
     @Override
     public void refreshData(List<String> urlList) {
         this.imageUrlList = urlList;
+
         adapter.setUrlList(urlList);
-//        adapter.notifyDataSetChanged();
+        setOnItemClickListener(adapter);
+        footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
+        footerAdapter.setAdapter(adapter);
         footerAdapter.notifyDataSetChanged();
-        recyclerView.invalidate();
+        Log.e("====", "刷新数据");
+        if (urlList.size() == 0) {
+            present.refreshDataFromNet(currentPage);
+        }
     }
 
     @Override
     public void stopRefreshing() {
         refreshLayout.setRefreshing(false);
+    }
+
+    private void setOnItemClickListener(GirlAdapter girlAdapter) {
+        girlAdapter.setOnItemClickListener(new GirlAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String imageUrl = imageUrlList.get(position);
+
+                Intent intent = new Intent(getContext(), PhotoActivity.class);
+                intent.putExtra(Contacts.BUNDLE_RUL, imageUrl);
+
+                startActivity(intent);
+
+            }
+        });
     }
 }

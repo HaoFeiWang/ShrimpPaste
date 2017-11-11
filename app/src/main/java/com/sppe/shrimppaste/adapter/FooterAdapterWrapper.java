@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.sppe.shrimppaste.R;
 
+import java.util.List;
+
 
 /**
  * 上拉刷新的Adapter的包装类
@@ -20,15 +22,22 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
 
+    public static final int STATE_START = 1;
+    public static final int STATE_LOADING = 2;
+    public static final int STATE_COMPLETE = 3;
+
+
     private RecyclerView.Adapter adapter;
+    private int currentState;
 
     public FooterAdapterWrapper(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
+        this.currentState = STATE_COMPLETE;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position + 1 == getItemCount()) {
+        if (position > 1 && position + 1 == getItemCount()) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -47,7 +56,12 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FooterHolder) {
-
+            if (currentState == STATE_LOADING) {
+                ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
+            }else {
+                Log.e("====","隐藏Footer");
+                ((FooterHolder) holder).itemView.setVisibility(View.GONE);
+            }
         } else {
             adapter.onBindViewHolder(holder, position);
         }
@@ -66,7 +80,6 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            Log.e("===","true");
             final GridLayoutManager manager = (GridLayoutManager) layoutManager;
             manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -74,10 +87,15 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
                     return getItemViewType(position) == TYPE_FOOTER ? manager.getSpanCount() : 1;
                 }
             });
-        }else {
-            Log.e("===","false");
         }
     }
 
+    public void setCurrentState(int state) {
+        this.currentState = state;
+    }
+
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        this.adapter = adapter;
+    }
 
 }
