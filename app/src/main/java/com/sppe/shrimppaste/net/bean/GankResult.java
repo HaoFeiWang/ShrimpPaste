@@ -1,30 +1,23 @@
-package com.sppe.shrimppaste.data.dao;
+package com.sppe.shrimppaste.net.bean;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.List;
 
 /**
- * Created by WHF on 2017/11/5.
+ * Created by WHF on 2017/11/12.
  */
-@DatabaseTable(tableName = "tb_photo")
-public class PhotoEntry {
 
-    @DatabaseField(uniqueIndex = true)
+public class GankResult {
+
     private String _id;
     private String createAt;
-    @DatabaseField
     private String desc;
-    @DatabaseField
+    private List<String> images;
     private String publishedAt;
-    @DatabaseField
     private String source;
-    @DatabaseField
     private String type;
-    @DatabaseField
     private String url;
-    @DatabaseField
-    private String Boolean;
-    @DatabaseField
+    private Boolean uesd;
     private String who;
 
     public String get_id() {
@@ -83,14 +76,6 @@ public class PhotoEntry {
         this.url = url;
     }
 
-    public String getBoolean() {
-        return Boolean;
-    }
-
-    public void setBoolean(String aBoolean) {
-        Boolean = aBoolean;
-    }
-
     public String getWho() {
         return who;
     }
@@ -99,17 +84,34 @@ public class PhotoEntry {
         this.who = who;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public Boolean getUesd() {
+        return uesd;
+    }
+
+    public void setUesd(Boolean uesd) {
+        this.uesd = uesd;
+    }
+
     @Override
     public String toString() {
-        return "PhotoEntry{" +
+        return "GankResult{" +
                 "_id='" + _id + '\'' +
                 ", createAt='" + createAt + '\'' +
                 ", desc='" + desc + '\'' +
+                ", images=" + images +
                 ", publishedAt='" + publishedAt + '\'' +
                 ", source='" + source + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
-                ", Boolean='" + Boolean + '\'' +
+                ", uesd=" + uesd +
                 ", who='" + who + '\'' +
                 '}';
     }

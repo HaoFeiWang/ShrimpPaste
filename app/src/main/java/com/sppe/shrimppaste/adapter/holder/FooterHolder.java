@@ -1,4 +1,4 @@
-package com.sppe.shrimppaste.adapter;
+package com.sppe.shrimppaste.adapter.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.view.View;
 
 public class FooterHolder extends RecyclerView.ViewHolder{
 
-    View itemView;
+    public View itemView;
 
     public FooterHolder(View itemView) {
         super(itemView);

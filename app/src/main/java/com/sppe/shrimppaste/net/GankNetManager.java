@@ -3,9 +3,9 @@ package com.sppe.shrimppaste.net;
 import android.content.Context;
 
 import com.sppe.shrimppaste.adapter.GirlAdapter;
-import com.sppe.shrimppaste.net.bean.GirlResult;
-import com.sppe.shrimppaste.data.dao.PhotoDao;
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
+import com.sppe.shrimppaste.data.dao.GankEntry;
+import com.sppe.shrimppaste.net.bean.BaseGankResult;
+import com.sppe.shrimppaste.data.dao.GankDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,70 +57,18 @@ public class GankNetManager implements GankNetService {
         return gankNetManager;
     }
 
-
-    public void getDataFromLocal(final GirlAdapter adapter, final Context context) {
-
-        Observer<String> observer = new Observer<String>() {
-            List<String> imageUrlList = new ArrayList<>();
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@NonNull String s) {
-                imageUrlList.add(s);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                adapter.setUrlList(imageUrlList);
-            }
-        };
-
-
-        Observable.create(new ObservableOnSubscribe<List<PhotoEntry>>() {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<List<PhotoEntry>> e) throws Exception {
-                e.onNext(new PhotoDao(context).queryPhotoEntryList());
-                e.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.newThread())
-                .flatMap(new Function<List<PhotoEntry>, ObservableSource<PhotoEntry>>() {
-                    @Override
-                    public ObservableSource<PhotoEntry> apply(@NonNull List<PhotoEntry> photoEntries)
-                            throws Exception {
-                        return Observable.fromIterable(photoEntries);
-                    }
-                })
-                .map(new Function<PhotoEntry, String>() {
-                    @Override
-                    public String apply(@NonNull PhotoEntry photoEntry) throws Exception {
-                        return photoEntry.getUrl();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
-
     @Override
-    public Observable<GirlResult> getGirl(int page) {
+    public Observable<BaseGankResult> getGirl(int page) {
         return gankService.getGirl(page);
     }
 
     @Override
-    public List<GirlResult> getAndroid(int page) {
+    public Observable<BaseGankResult> getAndroid(int page) {
         return gankService.getAndroid(page);
     }
 
     @Override
-    public List<GirlResult> getIos(int page) {
+    public Observable<BaseGankResult> getIos(int page) {
         return gankService.getIos(page);
     }
 }

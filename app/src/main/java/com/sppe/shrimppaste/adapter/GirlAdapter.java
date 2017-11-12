@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sppe.shrimppaste.R;
-import com.sppe.shrimppaste.net.GlideHelp;
+import com.sppe.shrimppaste.adapter.holder.GirlHolder;
+import com.sppe.shrimppaste.util.GlideHelp;
 
 import java.util.ArrayList;
 import java.util.List;

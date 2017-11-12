@@ -1,16 +1,13 @@
 package com.sppe.shrimppaste.service;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.j256.ormlite.dao.Dao;
-import com.sppe.shrimppaste.data.dao.PhotoDao;
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
+import com.sppe.shrimppaste.data.dao.GankEntry;
+import com.sppe.shrimppaste.data.dao.GankDao;
 import com.sppe.shrimppaste.net.GankNetManager;
-import com.sppe.shrimppaste.net.bean.GirlResult;
+import com.sppe.shrimppaste.net.bean.BaseGankResult;
 
 import java.util.List;
-import java.util.Observer;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
@@ -25,39 +22,89 @@ public class GankServiceImpl implements GankService {
 
     private static final String TAG = GankServiceImpl.class.getSimpleName();
 
-    private PhotoDao photoDao;
+    private GankDao gankDao;
 
     public GankServiceImpl(Context context) {
-        photoDao = new PhotoDao(context);
+        gankDao = new GankDao(context);
     }
 
     @Override
-    public Observable<List<PhotoEntry>> getNetGirl(final int page) {
+    public Observable<List<GankEntry>> getNetGirlList(final int page) {
         return GankNetManager.getInstance().getGirl(page)
-                .map(new Function<GirlResult, List<PhotoEntry>>() {
+                .map(new Function<BaseGankResult, List<GankEntry>>() {
                     @Override
-                    public List<PhotoEntry> apply(@NonNull GirlResult girlResult) throws Exception {
-                        List<PhotoEntry> photoEntryList = girlResult.getResults();
-                        photoDao.addPhotoEntryList(photoEntryList);
-                        return photoDao.queryPhotoEntryList();
+                    public List<GankEntry> apply(@NonNull BaseGankResult baseGankResult) throws Exception {
+                        List<GankEntry> gankEntryList = baseGankResult.getResults();
+                        gankDao.addGankList(gankEntryList);
+                        return gankDao.queryGirlList();
                     }
                 }).subscribeOn(Schedulers.newThread());
     }
 
-    public Observable<List<PhotoEntry>> getDbGirlList() {
-        return Observable.just(true).map(new Function<Boolean, List<PhotoEntry>>() {
+    @Override
+    public Observable<List<GankEntry>> getDbGirlList() {
+        return Observable.just(true).map(new Function<Boolean, List<GankEntry>>() {
             @Override
-            public List<PhotoEntry> apply(@NonNull Boolean b) throws Exception {
-                return photoDao.queryPhotoEntryList();
+            public List<GankEntry> apply(@NonNull Boolean b) throws Exception {
+                return gankDao.queryGirlList();
             }
         }).subscribeOn(Schedulers.newThread());
     }
 
-    public Observable<PhotoEntry> getRandowDbGirl() {
-        return Observable.just(true).map(new Function<Boolean, PhotoEntry>() {
+    @Override
+    public Observable<GankEntry> getRandowDbGirl() {
+        return Observable.just(true).map(new Function<Boolean, GankEntry>() {
             @Override
-            public PhotoEntry apply(@NonNull Boolean b) throws Exception {
-                return photoDao.queryRandowPhotoEntry();
+            public GankEntry apply(@NonNull Boolean b) throws Exception {
+                return gankDao.queryRandowGirl();
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+
+    @Override
+    public Observable<List<GankEntry>> getNetAndoridList(int page) {
+        return GankNetManager.getInstance().getAndroid(page)
+                .map(new Function<BaseGankResult, List<GankEntry>>() {
+                    @Override
+                    public List<GankEntry> apply(@NonNull BaseGankResult baseGankResult) throws Exception {
+                        List<GankEntry> gankEntryList = baseGankResult.getResults();
+
+
+                        gankDao.addGankList(gankEntryList);
+                        return gankDao.queryAndroidList();
+                    }
+                }).subscribeOn(Schedulers.newThread());
+    }
+
+    @Override
+    public Observable<List<GankEntry>> getDbAndoridList() {
+        return Observable.just(true).map(new Function<Boolean, List<GankEntry>>() {
+            @Override
+            public List<GankEntry> apply(@NonNull Boolean b) throws Exception {
+                return gankDao.queryAndroidList();
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+
+    @Override
+    public Observable<List<GankEntry>> getNetIosList(int page) {
+        return GankNetManager.getInstance().getIos(page)
+                .map(new Function<BaseGankResult, List<GankEntry>>() {
+                    @Override
+                    public List<GankEntry> apply(@NonNull BaseGankResult baseGankResult) throws Exception {
+                        List<GankEntry> gankEntryList = baseGankResult.getResults();
+                        gankDao.addGankList(gankEntryList);
+                        return gankDao.queryIosList();
+                    }
+                }).subscribeOn(Schedulers.newThread());
+    }
+
+    @Override
+    public Observable<List<GankEntry>> getDbIosList() {
+        return Observable.just(true).map(new Function<Boolean, List<GankEntry>>() {
+            @Override
+            public List<GankEntry> apply(@NonNull Boolean b) throws Exception {
+                return gankDao.queryIosList();
             }
         }).subscribeOn(Schedulers.newThread());
     }

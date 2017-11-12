@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sppe.shrimppaste.R;
-
-import java.util.List;
+import com.sppe.shrimppaste.adapter.holder.FooterHolder;
 
 
 /**

@@ -1,7 +1,6 @@
 package com.sppe.shrimppaste.service;
 
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
-import com.sppe.shrimppaste.net.bean.GirlResult;
+import com.sppe.shrimppaste.data.dao.GankEntry;
 
 import java.util.List;
 
@@ -13,10 +12,17 @@ import io.reactivex.Observable;
 
 public interface GankService {
 
-    Observable<List<PhotoEntry>> getNetGirl(int page);
+    Observable<List<GankEntry>> getNetGirlList(int page);
 
-    Observable<List<PhotoEntry>> getDbGirlList();
+    Observable<List<GankEntry>> getDbGirlList();
 
-    Observable<PhotoEntry> getRandowDbGirl();
+    Observable<GankEntry> getRandowDbGirl();
 
+    Observable<List<GankEntry>> getNetAndoridList(int page);
+
+    Observable<List<GankEntry>> getDbAndoridList();
+
+    Observable<List<GankEntry>> getNetIosList(int page);
+
+    Observable<List<GankEntry>> getDbIosList();
 }

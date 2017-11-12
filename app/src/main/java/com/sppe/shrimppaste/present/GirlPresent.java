@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.sppe.shrimppaste.base.BaseMvpPresent;
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
+import com.sppe.shrimppaste.data.dao.GankEntry;
 import com.sppe.shrimppaste.service.GankServiceImpl;
 import com.sppe.shrimppaste.ui.view.GirlView;
 
@@ -25,11 +25,9 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
 
     private static final String TAG = GirlPresent.class.getSimpleName();
 
-    private Context context;
     private GankServiceImpl serviceImpl;
 
     public GirlPresent(Context context) {
-        this.context = context;
         serviceImpl = new GankServiceImpl(context);
     }
 
@@ -43,10 +41,6 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
 
             @Override
             public void onNext(@NonNull List<String> urlList) {
-
-                for (String str : urlList) {
-                    Log.e("==数据库==", str);
-                }
                 view.refreshData(urlList);
             }
 
@@ -61,11 +55,11 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
             }
         };
 
-        serviceImpl.getDbGirlList().map(new Function<List<PhotoEntry>, List<String>>() {
+        serviceImpl.getDbGirlList().map(new Function<List<GankEntry>, List<String>>() {
             @Override
-            public List<String> apply(@NonNull List<PhotoEntry> photoEntries) throws Exception {
+            public List<String> apply(@NonNull List<GankEntry> photoEntries) throws Exception {
                 List<String> list = new ArrayList<>();
-                for (PhotoEntry photo : photoEntries) {
+                for (GankEntry photo : photoEntries) {
                     list.add(photo.getUrl());
                 }
                 return list;
@@ -95,11 +89,11 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
             }
         };
 
-        serviceImpl.getNetGirl(page).map(new Function<List<PhotoEntry>, List<String>>() {
+        serviceImpl.getNetGirlList(page).map(new Function<List<GankEntry>, List<String>>() {
             @Override
-            public List<String> apply(@NonNull List<PhotoEntry> photoEntries) throws Exception {
+            public List<String> apply(@NonNull List<GankEntry> photoEntries) throws Exception {
                 List<String> list = new ArrayList<>();
-                for (PhotoEntry photo : photoEntries) {
+                for (GankEntry photo : photoEntries) {
                     list.add(photo.getUrl());
                 }
                 return list;

@@ -18,8 +18,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.sppe.shrimppaste.App;
 import com.sppe.shrimppaste.R;
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
-import com.sppe.shrimppaste.net.GlideHelp;
+import com.sppe.shrimppaste.data.dao.GankEntry;
+import com.sppe.shrimppaste.util.GlideHelp;
 import com.sppe.shrimppaste.service.GankService;
 import com.sppe.shrimppaste.service.GankServiceImpl;
 
@@ -30,7 +30,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -95,14 +94,14 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     private void initImage() {
-        Observer<PhotoEntry> observer = new Observer<PhotoEntry>() {
+        Observer<GankEntry> observer = new Observer<GankEntry>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(PhotoEntry photoEntry) {
+            public void onNext(GankEntry photoEntry) {
                 if (photoEntry != null) {
                     loadDbImage(photoEntry);
                 }
@@ -125,9 +124,9 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
 
-    private void loadDbImage(PhotoEntry photoEntry) {
+    private void loadDbImage(GankEntry gankEntry) {
         Glide.with(LaunchActivity.this)
-                .load(photoEntry.getUrl())
+                .load(gankEntry.getUrl())
                 .apply(GlideHelp.optionsNoPlace)
                 .listener(new RequestListener<Drawable>() {
                     @Override

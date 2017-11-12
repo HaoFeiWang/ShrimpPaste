@@ -43,7 +43,7 @@ public class DatabaseHelp extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, PhotoEntry.class);
+            TableUtils.createTable(connectionSource, GankEntry.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class DatabaseHelp extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource,
                           int oldVersion, int newVersion) {
         try {
-            TableUtils.dropTable(connectionSource, PhotoEntry.class, true);
+            TableUtils.dropTable(connectionSource, GankEntry.class, true);
             onCreate(database, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();

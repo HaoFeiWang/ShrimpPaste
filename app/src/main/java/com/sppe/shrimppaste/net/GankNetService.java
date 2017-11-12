@@ -1,6 +1,6 @@
 package com.sppe.shrimppaste.net;
 
-import com.sppe.shrimppaste.net.bean.GirlResult;
+import com.sppe.shrimppaste.net.bean.BaseGankResult;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import retrofit2.http.Path;
 public interface GankNetService {
 
     @GET("data/福利/10/{page}")
-    Observable<GirlResult> getGirl(@Path("page")int page);
+    Observable<BaseGankResult> getGirl(@Path("page")int page);
 
-    @GET("/data/Android/10/{page}")
-    List<GirlResult> getAndroid(@Path("page")int page);
+    @GET("data/Android/10/{page}")
+    Observable<BaseGankResult> getAndroid(@Path("page")int page);
 
-    @GET("/data/iOS/10/{page}")
-    List<GirlResult> getIos(@Path("page")int page);
+    @GET("data/iOS/10/{page}")
+    Observable<BaseGankResult> getIos(@Path("page")int page);
 
 }

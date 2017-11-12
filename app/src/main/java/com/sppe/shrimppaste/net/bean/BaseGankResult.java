@@ -1,6 +1,7 @@
 package com.sppe.shrimppaste.net.bean;
 
-import com.sppe.shrimppaste.data.dao.PhotoEntry;
+
+import com.sppe.shrimppaste.data.dao.GankEntry;
 
 import java.util.List;
 
@@ -8,10 +9,10 @@ import java.util.List;
  * Created by WHF on 2017/11/5.
  */
 
-public class GirlResult {
+public class BaseGankResult {
 
     private Boolean error;
-    private List<PhotoEntry> results;
+    private List<GankEntry> results;
 
     public Boolean getError() {
         return error;
@@ -21,11 +22,11 @@ public class GirlResult {
         this.error = error;
     }
 
-    public List<PhotoEntry> getResults() {
+    public List<GankEntry> getResults() {
         return results;
     }
 
-    public void setResults(List<PhotoEntry> results) {
+    public void setResults(List<GankEntry> results) {
         this.results = results;
     }
 }

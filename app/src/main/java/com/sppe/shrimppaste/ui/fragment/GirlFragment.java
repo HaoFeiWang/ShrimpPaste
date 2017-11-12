@@ -1,7 +1,6 @@
 package com.sppe.shrimppaste.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.adapter.FooterAdapterWrapper;
 import com.sppe.shrimppaste.adapter.FooterRecyclerScrollListener;
@@ -22,12 +18,10 @@ import com.sppe.shrimppaste.adapter.GirlAdapter;
 import com.sppe.shrimppaste.adapter.GirlItemDecoration;
 import com.sppe.shrimppaste.base.BaseMvpFragment;
 import com.sppe.shrimppaste.data.contacts.Contacts;
-import com.sppe.shrimppaste.net.GlideHelp;
 import com.sppe.shrimppaste.present.GirlPresent;
 import com.sppe.shrimppaste.ui.activity.PhotoActivity;
 import com.sppe.shrimppaste.ui.view.GirlView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 

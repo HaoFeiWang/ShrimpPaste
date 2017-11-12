@@ -4,10 +4,13 @@
              android:layout_height="match_parent"
              tools:context="com.sppe.shrimppaste.ui.fragment.AndroidFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="AndroidFragment"/>
-
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

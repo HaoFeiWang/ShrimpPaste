@@ -1,4 +1,4 @@
-package com.sppe.shrimppaste.adapter;
+package com.sppe.shrimppaste.adapter.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
