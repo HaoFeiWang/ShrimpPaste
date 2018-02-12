@@ -1,6 +1,7 @@
 package com.sppe.shrimppaste.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.sppe.shrimppaste.R;
-import com.sppe.shrimppaste.adapter.FooterHelp;
+import com.sppe.shrimppaste.ui.FooterHelp;
 import com.sppe.shrimppaste.adapter.GirlAdapter;
 import com.sppe.shrimppaste.adapter.GirlItemDecoration;
 import com.sppe.shrimppaste.base.BaseMvpFragment;
@@ -20,6 +21,7 @@ import com.sppe.shrimppaste.data.contacts.Contacts;
 import com.sppe.shrimppaste.present.GirlPresent;
 import com.sppe.shrimppaste.ui.activity.PhotoActivity;
 import com.sppe.shrimppaste.ui.view.GirlView;
+import com.sppe.shrimppaste.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +65,9 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRefreshLayout();
         initRecyclerView();
+        initRefreshLayout();
+        initData();
     }
 
     @Override
@@ -85,8 +88,6 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
         setOnItemClickListener(adapter);
         setScrollToFooterListener();
-
-        present.refreshDataFromDb();
     }
 
     private void initRefreshLayout() {
@@ -98,12 +99,19 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         });
     }
 
+    private void initData() {
+        present.refreshDataFromDb();
+        SharedPreferencesUtil.getString(getContext(),);
+    }
+
+
     private void setScrollToFooterListener() {
         footerHelp = new FooterHelp();
         footerHelp.attachScrollToFooterListener(recyclerView, new FooterHelp.ScrollToFooterListener() {
             @Override
             public void scrollToFooter() {
-                present.refreshDataFromNet(currentPage);
+                rlFooter.setVisibility(View.VISIBLE);
+                present.refreshDataFromNet(++currentPage);
             }
         });
     }

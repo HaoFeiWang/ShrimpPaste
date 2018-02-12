@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.sppe.shrimppaste.base.BaseMvpPresent;
+import com.sppe.shrimppaste.data.contacts.Contacts;
 import com.sppe.shrimppaste.data.dao.PhotoEntry;
 import com.sppe.shrimppaste.service.GankServiceImpl;
 import com.sppe.shrimppaste.ui.view.GirlView;
@@ -23,7 +24,7 @@ import io.reactivex.functions.Function;
 
 public class GirlPresent extends BaseMvpPresent<GirlView> {
 
-    private static final String TAG = GirlPresent.class.getSimpleName();
+    private static final String TAG = Contacts.LOG_TAG + GirlPresent.class.getSimpleName();
 
     private Context context;
     private GankServiceImpl serviceImpl;
@@ -34,6 +35,7 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
     }
 
     public void refreshDataFromDb() {
+        Log.i(TAG, "refresh data from db!");
         serviceImpl
                 .getDbGirlList()
                 .map(getMapper())
@@ -63,6 +65,7 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
     }
 
     public void refreshDataFromNet(int page) {
+        Log.i(TAG, "refresh data from net!");
         serviceImpl
                 .getNetGirl(page)
                 .map(getMapper())
