@@ -12,5 +12,5 @@ public interface GirlView extends BaseMvpView {
 
     void refreshDataSuccess(List<String> urlList);
 
-    void stopRefreshing();
+    void refreshDataError();
 }

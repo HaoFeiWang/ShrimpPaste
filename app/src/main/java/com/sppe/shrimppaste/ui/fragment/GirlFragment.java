@@ -1,38 +1,32 @@
 package com.sppe.shrimppaste.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.sppe.shrimppaste.R;
-import com.sppe.shrimppaste.adapter.FooterAdapterWrapper;
-import com.sppe.shrimppaste.adapter.FooterRecyclerScrollListener;
+import com.sppe.shrimppaste.adapter.FooterHelp;
 import com.sppe.shrimppaste.adapter.GirlAdapter;
 import com.sppe.shrimppaste.adapter.GirlItemDecoration;
 import com.sppe.shrimppaste.base.BaseMvpFragment;
 import com.sppe.shrimppaste.data.contacts.Contacts;
-import com.sppe.shrimppaste.net.GlideHelp;
 import com.sppe.shrimppaste.present.GirlPresent;
 import com.sppe.shrimppaste.ui.activity.PhotoActivity;
 import com.sppe.shrimppaste.ui.view.GirlView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by WHF on 2017/11/5.
+ * 美女页
+ * Created by @author WHF on 2017/11/5.
  */
 
 public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> implements GirlView {
@@ -41,24 +35,27 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
     private static final int START_PAGE = 1;
 
-    private View view;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
+    private RelativeLayout rlFooter;
 
+    private int currentPage;
     private List<String> imageUrlList;
-    private GirlAdapter adapter;
-    private FooterAdapterWrapper footerAdapter;
 
-    private int currentPage = START_PAGE;
+    private GirlAdapter adapter;
+    private FooterHelp footerHelp;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_girl, container, false);
+        View view = inflater.inflate(R.layout.fragment_girl, container, false);
 
         this.recyclerView = (RecyclerView) view.findViewById(R.id.rv_girl);
         this.refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_girl);
+        rlFooter = (RelativeLayout) view.findViewById(R.id.rl_footer);
+
+        currentPage = START_PAGE;
 
         return view;
     }
@@ -80,26 +77,16 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
         imageUrlList = new ArrayList<>();
         adapter = new GirlAdapter(getContext(), imageUrlList);
-        setOnItemClickListener(adapter);
-        footerAdapter = new FooterAdapterWrapper(adapter);
+        adapter = new GirlAdapter(getContext(), imageUrlList);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(footerAdapter);
+        recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new GirlItemDecoration(getContext()));
-        setScrollListener();
+
+        setOnItemClickListener(adapter);
+        setScrollToFooterListener();
 
         present.refreshDataFromDb();
-    }
-
-    private void setScrollListener() {
-        recyclerView.addOnScrollListener(new FooterRecyclerScrollListener() {
-            @Override
-            public void onLoadMore() {
-                footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_LOADING);
-                footerAdapter.notifyDataSetChanged();
-                present.refreshDataFromNet(++currentPage);
-            }
-        });
     }
 
     private void initRefreshLayout() {
@@ -111,23 +98,14 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         });
     }
 
-    @Override
-    public void refreshDataSuccess(List<String> urlList) {
-        this.imageUrlList = urlList;
-
-        adapter.setUrlList(urlList);
-        setOnItemClickListener(adapter);
-        footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
-        footerAdapter.setAdapter(adapter);
-        footerAdapter.notifyDataSetChanged();
-        if (urlList.size() == 0) {
-            present.refreshDataFromNet(currentPage);
-        }
-    }
-
-    @Override
-    public void stopRefreshing() {
-        refreshLayout.setRefreshing(false);
+    private void setScrollToFooterListener() {
+        footerHelp = new FooterHelp();
+        footerHelp.attachScrollToFooterListener(recyclerView, new FooterHelp.ScrollToFooterListener() {
+            @Override
+            public void scrollToFooter() {
+                present.refreshDataFromNet(currentPage);
+            }
+        });
     }
 
     private void setOnItemClickListener(GirlAdapter girlAdapter) {
@@ -140,8 +118,28 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
                 intent.putExtra(Contacts.BUNDLE_RUL, imageUrl);
 
                 startActivity(intent);
-
             }
         });
+    }
+
+    @Override
+    public void refreshDataSuccess(List<String> urlList) {
+        if (urlList == null || urlList.size() == 0) {
+            return;
+        }
+
+        imageUrlList = urlList;
+        adapter.setUrlList(urlList);
+        adapter.notifyDataSetChanged();
+
+        footerHelp.resetScrollToFooterTag();
+        rlFooter.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void refreshDataError() {
+
+        footerHelp.resetScrollToFooterTag();
+        rlFooter.setVisibility(View.GONE);
     }
 }

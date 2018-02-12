@@ -34,68 +34,64 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
     }
 
     public void refreshDataFromDb() {
+        serviceImpl
+                .getDbGirlList()
+                .map(getMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<String>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-        Observer<List<String>> observer = new Observer<List<String>>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
+                    }
 
-            }
+                    @Override
+                    public void onNext(@NonNull List<String> urlList) {
+                        view.refreshDataSuccess(urlList);
+                    }
 
-            @Override
-            public void onNext(@NonNull List<String> urlList) {
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(TAG, "refresh data from db error = " + e.toString());
+                        view.refreshDataError();
+                    }
 
-                for (String str : urlList) {
-                    Log.e("==数据库==", str);
-                }
-                view.refreshDataSuccess(urlList);
-            }
+                    @Override
+                    public void onComplete() {
 
-            @Override
-            public void onError(@NonNull Throwable e) {
-                Log.e(TAG, e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-
-        serviceImpl.getDbGirlList().map(new Function<List<PhotoEntry>, List<String>>() {
-            @Override
-            public List<String> apply(@NonNull List<PhotoEntry> photoEntries) throws Exception {
-                List<String> list = new ArrayList<>();
-                for (PhotoEntry photo : photoEntries) {
-                    list.add(photo.getUrl());
-                }
-                return list;
-            }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
+                    }
+                });
     }
 
     public void refreshDataFromNet(int page) {
+        serviceImpl
+                .getNetGirl(page)
+                .map(getMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<String>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                    }
 
-        Observer<List<String>> observer = new Observer<List<String>>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-            }
+                    @Override
+                    public void onNext(@NonNull List<String> urlList) {
+                        view.refreshDataSuccess(urlList);
+                    }
 
-            @Override
-            public void onNext(@NonNull List<String> urlList) {
-                view.refreshDataSuccess(urlList);
-                view.stopRefreshing();
-            }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(TAG, "refresh data from net error = " + e.toString());
+                        view.refreshDataError();
+                    }
 
-            @Override
-            public void onError(@NonNull Throwable e) {
-            }
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
 
-            @Override
-            public void onComplete() {
-            }
-        };
-
-        serviceImpl.getNetGirl(page).map(new Function<List<PhotoEntry>, List<String>>() {
+    @android.support.annotation.NonNull
+    private Function<List<PhotoEntry>, List<String>> getMapper() {
+        return new Function<List<PhotoEntry>, List<String>>() {
             @Override
             public List<String> apply(@NonNull List<PhotoEntry> photoEntries) throws Exception {
                 List<String> list = new ArrayList<>();
@@ -104,6 +100,6 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
                 }
                 return list;
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
+        };
     }
 }
