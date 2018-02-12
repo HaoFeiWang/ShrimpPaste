@@ -44,6 +44,7 @@ public class GankServiceImpl implements GankService {
                 }).subscribeOn(Schedulers.newThread());
     }
 
+    @Override
     public Observable<List<PhotoEntry>> getDbGirlList() {
         return Observable.just(true).map(new Function<Boolean, List<PhotoEntry>>() {
             @Override
@@ -53,6 +54,7 @@ public class GankServiceImpl implements GankService {
         }).subscribeOn(Schedulers.newThread());
     }
 
+    @Override
     public Observable<PhotoEntry> getRandowDbGirl() {
         return Observable.just(true).map(new Function<Boolean, PhotoEntry>() {
             @Override

@@ -30,11 +30,10 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by WHF on 2017/11/5.
+ * 开屏页
+ * Created by @author WHF on 2017/11/5.
  */
 public class LaunchActivity extends AppCompatActivity {
 
@@ -47,6 +46,9 @@ public class LaunchActivity extends AppCompatActivity {
     private App app;
 
     private ViewPropertyAnimator animator;
+
+    private Disposable delayedDisposable;
+    private Disposable imageDisposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,18 +65,24 @@ public class LaunchActivity extends AppCompatActivity {
             delayedToHome();
         } else {
             initImage();
-            app.setLaunch(true);
+            app.setLaunched();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseMemory();
+        super.onDestroy();
     }
 
     private void delayedToHome() {
         Observable
-                .timer(1000, TimeUnit.MILLISECONDS, Schedulers.newThread())
+                .timer(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                        delayedDisposable = d;
                     }
 
                     @Override
@@ -84,7 +92,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        startToHome();
                     }
 
                     @Override
@@ -95,37 +103,36 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     private void initImage() {
-        Observer<PhotoEntry> observer = new Observer<PhotoEntry>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(PhotoEntry photoEntry) {
-                if (photoEntry != null) {
-                    loadDbImage(photoEntry);
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                startToHome();
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-
         gankService.getRandowDbGirl()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(new Observer<PhotoEntry>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        imageDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(PhotoEntry photoEntry) {
+                        loadDbImage(photoEntry);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        startToHome();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
     private void loadDbImage(PhotoEntry photoEntry) {
+        if (photoEntry == null) {
+            return;
+        }
         Glide.with(LaunchActivity.this)
                 .load(photoEntry.getUrl())
                 .apply(GlideHelp.optionsNoPlace)
@@ -174,14 +181,21 @@ public class LaunchActivity extends AppCompatActivity {
     public void startToHome() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
-        releaseMemory();
         this.finish();
     }
 
-    public void releaseMemory(){
-        if (animator!=null){
+    public void releaseMemory() {
+        if (animator != null) {
             animator.cancel();
             animator = null;
+        }
+        if (delayedDisposable != null && !delayedDisposable.isDisposed()) {
+            delayedDisposable.dispose();
+            delayedDisposable = null;
+        }
+        if (imageDisposable!=null && !imageDisposable.isDisposed()){
+            imageDisposable.dispose();
+            imageDisposable = null;
         }
     }
 }

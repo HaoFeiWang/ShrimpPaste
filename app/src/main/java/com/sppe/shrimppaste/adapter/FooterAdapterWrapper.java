@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * 上拉刷新的Adapter的包装类
- * Created by WHF on 2017/11/8.
+ * Created by @author WHF on 2017/11/8.
  */
 
 public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -37,7 +37,7 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (position > 1 && position + 1 == getItemCount()) {
+        if (position > 1 && position + 1 >= getItemCount()) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -59,7 +59,6 @@ public class FooterAdapterWrapper extends RecyclerView.Adapter<RecyclerView.View
             if (currentState == STATE_LOADING) {
                 ((FooterHolder) holder).itemView.setVisibility(View.VISIBLE);
             }else {
-                Log.e("====","隐藏Footer");
                 ((FooterHolder) holder).itemView.setVisibility(View.GONE);
             }
         } else {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface GirlView extends BaseMvpView {
 
-    void refreshData(List<String> urlList);
+    void refreshDataSuccess(List<String> urlList);
 
     void stopRefreshing();
 }

@@ -37,7 +37,7 @@ import java.util.List;
 
 public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> implements GirlView {
 
-    private static final String TAG = GirlFragment.class.getSimpleName();
+    private static final String TAG = Contacts.LOG_TAG + GirlFragment.class.getSimpleName();
 
     private static final int START_PAGE = 1;
 
@@ -112,7 +112,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     }
 
     @Override
-    public void refreshData(List<String> urlList) {
+    public void refreshDataSuccess(List<String> urlList) {
         this.imageUrlList = urlList;
 
         adapter.setUrlList(urlList);
@@ -120,7 +120,6 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         footerAdapter.setCurrentState(FooterAdapterWrapper.STATE_COMPLETE);
         footerAdapter.setAdapter(adapter);
         footerAdapter.notifyDataSetChanged();
-        Log.e("====", "刷新数据");
         if (urlList.size() == 0) {
             present.refreshDataFromNet(currentPage);
         }

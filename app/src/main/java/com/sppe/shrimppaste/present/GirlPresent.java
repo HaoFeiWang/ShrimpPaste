@@ -47,7 +47,7 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
                 for (String str : urlList) {
                     Log.e("==数据库==", str);
                 }
-                view.refreshData(urlList);
+                view.refreshDataSuccess(urlList);
             }
 
             @Override
@@ -82,7 +82,7 @@ public class GirlPresent extends BaseMvpPresent<GirlView> {
 
             @Override
             public void onNext(@NonNull List<String> urlList) {
-                view.refreshData(urlList);
+                view.refreshDataSuccess(urlList);
                 view.stopRefreshing();
             }
 

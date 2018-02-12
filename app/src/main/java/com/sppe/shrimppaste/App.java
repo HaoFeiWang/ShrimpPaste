@@ -22,7 +22,7 @@ public class App extends Application {
         return launch;
     }
 
-    public void setLaunch(boolean launch) {
-        this.launch = launch;
+    public void setLaunched() {
+        this.launch = true;
     }
 }
