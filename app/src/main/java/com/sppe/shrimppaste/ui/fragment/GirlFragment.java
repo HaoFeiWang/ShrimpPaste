@@ -36,6 +36,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     private static final String TAG = Contacts.LOG_TAG + GirlFragment.class.getSimpleName();
 
     private static final int START_PAGE = 1;
+    private static final long REFRESH_INTERVAL = 1000 * 60 * 60;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
@@ -56,8 +57,6 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         this.recyclerView = (RecyclerView) view.findViewById(R.id.rv_girl);
         this.refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_girl);
         rlFooter = (RelativeLayout) view.findViewById(R.id.rl_footer);
-
-        currentPage = START_PAGE;
 
         return view;
     }
@@ -100,10 +99,15 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     }
 
     private void initData() {
-        present.refreshDataFromDb();
-        SharedPreferencesUtil.getString(getContext(),);
-    }
+        currentPage = START_PAGE;
 
+        present.refreshDataFromDb();
+        if ((System.currentTimeMillis() - SharedPreferencesUtil.getRefreshDate(getContext())) > REFRESH_INTERVAL) {
+            refreshLayout.setRefreshing(true);
+            present.refreshDataFromNet(START_PAGE);
+            SharedPreferencesUtil.putRefreshDate(getContext());
+        }
+    }
 
     private void setScrollToFooterListener() {
         footerHelp = new FooterHelp();
@@ -111,7 +115,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
             @Override
             public void scrollToFooter() {
                 rlFooter.setVisibility(View.VISIBLE);
-                present.refreshDataFromNet(++currentPage);
+//                present.refreshDataFromNet(++currentPage);
             }
         });
     }
@@ -140,14 +144,20 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         adapter.setUrlList(urlList);
         adapter.notifyDataSetChanged();
 
-        footerHelp.resetScrollToFooterTag();
-        rlFooter.setVisibility(View.GONE);
+        releaseRefreshingState();
     }
 
     @Override
     public void refreshDataError() {
+        releaseRefreshingState();
+    }
 
+    private void releaseRefreshingState() {
         footerHelp.resetScrollToFooterTag();
         rlFooter.setVisibility(View.GONE);
+        if (refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
     }
+
 }

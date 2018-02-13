@@ -2,6 +2,9 @@ package com.sppe.shrimppaste.ui;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
+import android.view.View;
+
+import com.sppe.shrimppaste.data.contacts.Contacts;
 
 /**
  * Created by @author WHF on 2017/11/8.
@@ -9,9 +12,10 @@ import android.view.MotionEvent;
 
 public class FooterHelp {
 
-    private final int TOUCH_SLOP = 15;
+    private static final String TAG = Contacts.LOG_TAG + FooterHelp.class.getSimpleName();
+    private static final int TOUCH_SLOP = 15;
 
-    private boolean isMoveToUp = false;
+    private boolean isMoveToUp;
     private boolean scrollToFooterTag;
 
 
@@ -28,16 +32,15 @@ public class FooterHelp {
     private void setOnScrollListener(RecyclerView recyclerView, final ScrollToFooterListener scrollToFooterListener) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
                 boolean isScrollToFooter
-                        = (newState == RecyclerView.SCROLL_STATE_IDLE)
-                        && isMoveToUp
+                        = isMoveToUp
                         && (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()
                         >= recyclerView.computeVerticalScrollRange())
-                        && scrollToFooterListener != null
-                        && !scrollToFooterTag;
+                        && !scrollToFooterTag
+                        && scrollToFooterListener != null;
 
                 if (isScrollToFooter) {
                     scrollToFooterTag = true;
@@ -48,38 +51,33 @@ public class FooterHelp {
     }
 
     private void setOnTouchListener(RecyclerView recyclerView) {
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            float downY = 0;
 
             @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                float downY = 0;
-                switch (e.getAction()) {
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        downY = e.getRawY();
+                        downY = event.getRawY();
                         isMoveToUp = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if ((e.getRawY() - downY) < -TOUCH_SLOP) {
+                        if ((downY - event.getRawY()) > TOUCH_SLOP) {
                             isMoveToUp = true;
                         }
                         break;
                     default:
                         break;
                 }
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
+                return false;
             }
         });
     }
 
     public interface ScrollToFooterListener {
+        /**
+         * 滑动到列表底部
+         */
         void scrollToFooter();
     }
 }

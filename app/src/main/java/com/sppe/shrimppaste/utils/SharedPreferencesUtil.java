@@ -24,37 +24,37 @@ public class SharedPreferencesUtil {
         return instance;
     }
 
-
-    public static void putString(Context context, String name, String value) {
+    private static void putString(Context context, String name, String value) {
         getInstance(context);
         instance.edit().putString(name, value).apply();
     }
 
-    public static String getString(Context context, String name) {
-        return getString(context, name, "");
-    }
-
-    public static String getString(Context context, String name, String defValue) {
+    private static String getString(Context context, String name, String defValue) {
         getInstance(context);
         return instance.getString(name, defValue);
     }
 
-    public static void putInt(Context context, String name, int value) {
+    private static void putInt(Context context, String name, int value) {
         getInstance(context);
         instance.edit().putInt(name, value).apply();
     }
 
-    public static void putInt(Context context, String name, long value) {
+    private static void putLong(Context context, String name, long value) {
         getInstance(context);
-        instance.edit().putInt(name, value).apply();
+        instance.edit().putLong(name, value).apply();
     }
 
-    public static void putRefreshDate(Context context){
-        putInt(context,"refresh_date",System.currentTimeMillis());
+    private static long getLong(Context context, String name, long defValue) {
+        getInstance(context);
+        return instance.getLong(name, defValue);
     }
 
-    public static void getRefreshDate(Context context){
+    public static void putRefreshDate(Context context) {
+        putLong(context, "refresh_date", System.currentTimeMillis());
+    }
 
+    public static long getRefreshDate(Context context) {
+        return getLong(context, "refresh_date", 0);
     }
 
     public static void release() {
