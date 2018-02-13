@@ -30,6 +30,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = Contacts.LOG_TAG + PhotoActivity.class.getSimpleName();
 
     private static final float MIN_SCALE = 0.3f;
+    private static final float MIN_ALPHA = 0.3f;
 
     private RelativeLayout rlRoot;
     private ImageView ivContent;
@@ -48,6 +49,7 @@ public class PhotoActivity extends AppCompatActivity {
     private float touchSlop;
 
     private float scale;
+    private float alpha;
     private boolean isScaling;
 
     @Override
@@ -96,6 +98,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         touchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
         scale = 1;
+        alpha = 1;
     }
 
     private void initData() {
@@ -180,7 +183,6 @@ public class PhotoActivity extends AppCompatActivity {
                         }
 
                         if (isScaling) {
-
                             float curScale = scale + (lastTouchY - currentY) / screenHeight;
                             if (curScale >= MIN_SCALE && curScale <= 1) {
                                 scale = curScale;
@@ -188,15 +190,14 @@ public class PhotoActivity extends AppCompatActivity {
                             ivContent.setScaleX(scale);
                             ivContent.setScaleY(scale);
 
-                            float alpha = rlRoot.getBackground().getAlpha() + (lastTouchY - currentY) / screenHeight;
-
-                            if (alpha > 0 && alpha <= 1) {
-                                rlRoot.setBackgroundColor(Color.argb((int) (0xFF * alpha), 0, 0, 0));
+                            float curAlpha = alpha + (lastTouchY - currentY) / screenHeight;
+                            if (curAlpha > MIN_ALPHA && curAlpha <= 1) {
+                                alpha = curAlpha;
+                                rlRoot.setBackgroundColor(Color.argb((int) (255 * alpha), 0, 0, 0));
                             }
-//                            ivContent.setTranslationX(ivContent.getTranslationX() + lastTouchY - currentY);
-//                            ivContent.setTranslationY(ivContent.getTranslationY() + lastTouchY - currentY);
-                        }
 
+
+                        }
                         lastTouchX = currentX;
                         lastTouchY = currentY;
 
