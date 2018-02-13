@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -28,6 +29,8 @@ import com.sppe.shrimppaste.data.contacts.Contacts;
 public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = Contacts.LOG_TAG + PhotoActivity.class.getSimpleName();
 
+    private static final float MIN_SCALE = 0.3f;
+
     private RelativeLayout rlRoot;
     private ImageView ivContent;
 
@@ -43,6 +46,9 @@ public class PhotoActivity extends AppCompatActivity {
     private float height;
 
     private float touchSlop;
+
+    private float scale;
+    private boolean isScaling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +83,6 @@ public class PhotoActivity extends AppCompatActivity {
 
         width = (float) intent.getIntExtra(Contacts.GirlPhotoBundle.WIDTH, 0);
         height = (float) (getResources().getDimensionPixelSize(R.dimen.girl_item_height));
-
-        touchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
     }
 
     private void initScreenSize() {
@@ -89,6 +93,9 @@ public class PhotoActivity extends AppCompatActivity {
             screenWidth = displayMetrics.widthPixels;
             screenHeight = displayMetrics.heightPixels;
         }
+
+        touchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+        scale = 1;
     }
 
     private void initData() {
@@ -123,6 +130,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        Log.i(TAG, "onAnimationEnd");
                         rlRoot.setBackgroundColor(Color.BLACK);
                         setImageTouchListener();
                     }
@@ -154,21 +162,56 @@ public class PhotoActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         firstTouchX = event.getRawX();
-                        firstTouchY = event.getRawX();
+                        firstTouchY = event.getRawY();
+                        lastTouchX = firstTouchX;
+                        lastTouchY = firstTouchY;
+
+                        Log.i(TAG, "firstTouchX = " + firstTouchX);
+                        Log.i(TAG, "firstTouchY = " + firstTouchY);
+                        Log.i(TAG, "touchSlop = " + touchSlop);
+
+                        isScaling = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
 
+                        float currentX = event.getX();
+                        float currentY = event.getY();
 
-                        float deltaY = lastTouchY - firstTouchX;
-                        float deltaX = lastTouchX - lastTouchY;
+                        float deltaX = currentX - firstTouchX;
+                        float deltaY = currentY - firstTouchY;
+
+                        Log.i(TAG, "currentX = " + currentX);
+                        Log.i(TAG, "currentY = " + currentY);
 
                         if (deltaY > touchSlop && deltaY > Math.abs(deltaX)) {
-
-                            ivContent.setTranslationX(ivContent.getTranslationX() + deltaX);
+                            Log.i(TAG, "is scaling");
+                            isScaling = true;
                         }
 
-                        lastTouchY = event.getRawY();
-                        lastTouchY = event.getRawX();
+                        if (isScaling) {
+                            float alpha = rlRoot.getBackground().getAlpha() + (lastTouchY - currentY) / screenHeight;
+                            Log.i(TAG, "scale = " + scale);
+                            Log.i(TAG, "lastTouchY = " + (lastTouchY - currentY) / screenHeight);
+                            Log.i(TAG, "scale 2 = " + (lastTouchY - currentY) / screenHeight);
+
+                            float curScale = scale + (lastTouchY - currentY) / screenHeight;
+                            if (curScale >= MIN_SCALE && curScale <= 1) {
+                                scale = curScale;
+                            }
+
+                            ivContent.setScaleX(scale);
+                            ivContent.setScaleY(scale);
+
+
+                            if (alpha > 0 && alpha <= 1) {
+                                rlRoot.setBackgroundColor(Color.argb((int) (0xFF * alpha), 0, 0, 0));
+                            }
+//                            ivContent.setTranslationX(ivContent.getTranslationX() + lastTouchY - currentY);
+//                            ivContent.setTranslationY(ivContent.getTranslationY() + lastTouchY - currentY);
+                        }
+
+                        lastTouchX = currentX;
+                        lastTouchY = currentY;
 
                         break;
                     case MotionEvent.ACTION_CANCEL:
@@ -177,7 +220,7 @@ public class PhotoActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                return false;
+                return true;
             }
         });
     }
