@@ -42,7 +42,7 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
     }
 
     @Override
-    public void onBindViewHolder(GirlHolder holder,int position) {
+    public void onBindViewHolder(GirlHolder holder, int position) {
         final int index = position;
         if (imageUrlList.size() > position) {
             glideHelp.fillImage(context, imageUrlList.get(position), holder.ivContent);
@@ -51,8 +51,8 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
         holder.ivContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onItemClickListener!=null){
-                    onItemClickListener.onItemClick(index);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(index, v);
                 }
             }
         });
@@ -67,11 +67,16 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlHolder> {
         this.imageUrlList = imageUrlList;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(int position);
+    public interface OnItemClickListener {
+        /**
+         * 点击Item
+         * @param position 当前item的位置
+         * @param view 当前item的view
+         */
+        void onItemClick(int position, View view);
     }
 }

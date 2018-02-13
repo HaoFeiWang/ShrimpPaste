@@ -135,7 +135,7 @@ public class LaunchActivity extends AppCompatActivity {
         }
         Glide.with(LaunchActivity.this)
                 .load(photoEntry.getUrl())
-                .apply(GlideHelp.optionsNoPlace)
+                .apply(GlideHelp.OPTIONS_NO_PLACE)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model,

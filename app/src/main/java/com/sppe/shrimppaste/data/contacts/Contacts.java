@@ -9,5 +9,10 @@ public interface Contacts {
 
     String LOG_TAG = "ShrimpPaste-";
 
-    String BUNDLE_RUL = "url";
+    interface GirlPhotoBundle {
+        String URL = "url";
+        String MARGIN_TOP = "top";
+        String MARGIN_LEFT = "left";
+        String WIDTH = "width";
+    }
 }

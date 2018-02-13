@@ -6,24 +6,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.FullScreen" parent="AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="AppTheme.Launch" parent="AppTheme.FullScreen">
         <item name="android:windowBackground">@drawable/bg_launch</item>
     </style>
 
+    <style name="AppTheme.Photo" parent="AppTheme.FullScreen">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

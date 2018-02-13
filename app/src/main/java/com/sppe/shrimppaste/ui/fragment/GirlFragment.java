@@ -1,7 +1,6 @@
 package com.sppe.shrimppaste.ui.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -115,7 +114,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
             @Override
             public void scrollToFooter() {
                 rlFooter.setVisibility(View.VISIBLE);
-//                present.refreshDataFromNet(++currentPage);
+                present.refreshDataFromNet(++currentPage);
             }
         });
     }
@@ -123,11 +122,19 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     private void setOnItemClickListener(GirlAdapter girlAdapter) {
         girlAdapter.setOnItemClickListener(new GirlAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(int position, View view) {
                 String imageUrl = imageUrlList.get(position);
 
+                int[] location = new int[2];
+                view.getLocationInWindow(location);
+                int x = location[0];
+                int y = location[1];
+
                 Intent intent = new Intent(getContext(), PhotoActivity.class);
-                intent.putExtra(Contacts.BUNDLE_RUL, imageUrl);
+                intent.putExtra(Contacts.GirlPhotoBundle.URL, imageUrl);
+                intent.putExtra(Contacts.GirlPhotoBundle.MARGIN_TOP, y);
+                intent.putExtra(Contacts.GirlPhotoBundle.MARGIN_LEFT, x);
+                intent.putExtra(Contacts.GirlPhotoBundle.WIDTH, view.getWidth());
 
                 startActivity(intent);
             }
