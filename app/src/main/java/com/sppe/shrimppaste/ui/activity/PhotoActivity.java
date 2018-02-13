@@ -165,43 +165,30 @@ public class PhotoActivity extends AppCompatActivity {
                         firstTouchY = event.getRawY();
                         lastTouchX = firstTouchX;
                         lastTouchY = firstTouchY;
-
-                        Log.i(TAG, "firstTouchX = " + firstTouchX);
-                        Log.i(TAG, "firstTouchY = " + firstTouchY);
-                        Log.i(TAG, "touchSlop = " + touchSlop);
-
                         isScaling = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
 
-                        float currentX = event.getX();
-                        float currentY = event.getY();
+                        float currentX = event.getRawX();
+                        float currentY = event.getRawY();
 
                         float deltaX = currentX - firstTouchX;
                         float deltaY = currentY - firstTouchY;
 
-                        Log.i(TAG, "currentX = " + currentX);
-                        Log.i(TAG, "currentY = " + currentY);
-
                         if (deltaY > touchSlop && deltaY > Math.abs(deltaX)) {
-                            Log.i(TAG, "is scaling");
                             isScaling = true;
                         }
 
                         if (isScaling) {
-                            float alpha = rlRoot.getBackground().getAlpha() + (lastTouchY - currentY) / screenHeight;
-                            Log.i(TAG, "scale = " + scale);
-                            Log.i(TAG, "lastTouchY = " + (lastTouchY - currentY) / screenHeight);
-                            Log.i(TAG, "scale 2 = " + (lastTouchY - currentY) / screenHeight);
 
                             float curScale = scale + (lastTouchY - currentY) / screenHeight;
                             if (curScale >= MIN_SCALE && curScale <= 1) {
                                 scale = curScale;
                             }
-
                             ivContent.setScaleX(scale);
                             ivContent.setScaleY(scale);
 
+                            float alpha = rlRoot.getBackground().getAlpha() + (lastTouchY - currentY) / screenHeight;
 
                             if (alpha > 0 && alpha <= 1) {
                                 rlRoot.setBackgroundColor(Color.argb((int) (0xFF * alpha), 0, 0, 0));
