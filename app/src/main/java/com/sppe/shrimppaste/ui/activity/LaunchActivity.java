@@ -19,7 +19,6 @@ import com.bumptech.glide.request.target.Target;
 import com.sppe.shrimppaste.App;
 import com.sppe.shrimppaste.R;
 import com.sppe.shrimppaste.data.dao.PhotoEntry;
-import com.sppe.shrimppaste.net.GlideHelp;
 import com.sppe.shrimppaste.service.GankService;
 import com.sppe.shrimppaste.service.GankServiceImpl;
 
@@ -135,7 +134,6 @@ public class LaunchActivity extends AppCompatActivity {
         }
         Glide.with(LaunchActivity.this)
                 .load(photoEntry.getUrl())
-                .apply(GlideHelp.OPTIONS_NO_PLACE)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model,
