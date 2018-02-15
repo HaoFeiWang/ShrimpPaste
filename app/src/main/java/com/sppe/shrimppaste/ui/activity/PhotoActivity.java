@@ -50,6 +50,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     private float scale;
     private float alpha;
+    private float translationX;
+    private float translationY;
     private boolean isScaling;
 
     @Override
@@ -183,6 +185,7 @@ public class PhotoActivity extends AppCompatActivity {
                         }
 
                         if (isScaling) {
+
                             float curScale = scale + (lastTouchY - currentY) / screenHeight;
                             if (curScale >= MIN_SCALE && curScale <= 1) {
                                 scale = curScale;
@@ -196,7 +199,10 @@ public class PhotoActivity extends AppCompatActivity {
                                 rlRoot.setBackgroundColor(Color.argb((int) (255 * alpha), 0, 0, 0));
                             }
 
-
+                            translationX = translationX + (currentX - lastTouchX);
+                            translationY = translationY + (currentY - lastTouchY);
+                            ivContent.setTranslationY(translationY);
+                            ivContent.setTranslationX(translationX);
                         }
                         lastTouchX = currentX;
                         lastTouchY = currentY;
@@ -204,6 +210,10 @@ public class PhotoActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
+                        if (scale >0) {
+
+                        }
+
                         break;
                     default:
                         break;
