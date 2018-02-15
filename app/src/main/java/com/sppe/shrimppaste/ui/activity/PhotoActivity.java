@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +52,7 @@ public class PhotoActivity extends AppCompatActivity {
     private float translationX;
     private float translationY;
     private boolean isScaling;
+    private float thisScale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,9 @@ public class PhotoActivity extends AppCompatActivity {
         rlRoot = (RelativeLayout) findViewById(R.id.rl_photo_root);
         ivContent = (ImageView) findViewById(R.id.iv_content);
 
-        float scale = width / screenWidth;
-        ivContent.setScaleX(scale);
-        ivContent.setScaleY(scale);
+        thisScale = width / screenWidth;
+        ivContent.setScaleX(thisScale);
+        ivContent.setScaleY(thisScale);
 
         ivContent.setTranslationX(marginLeft - (screenWidth - width) / 2);
         ivContent.setTranslationY(marginTop - (screenHeight - height) / 2);
@@ -117,16 +117,17 @@ public class PhotoActivity extends AppCompatActivity {
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                                                    DataSource dataSource, boolean isFirstResource) {
                         ivContent.setImageDrawable(resource);
-                        startScaleAnim();
+                        startScaleAnim(1, 1, 0, 0);
                         return true;
                     }
                 }).into(ivContent);
     }
 
-    private void startScaleAnim() {
+    private void startScaleAnim(float scaleX, float scaleY,
+                                float translationX, float translationY) {
         ivContent.animate()
-                .scaleX(1).scaleY(1)
-                .translationX(0).translationY(0)
+                .scaleX(scaleX).scaleY(scaleY)
+                .translationX(translationX).translationY(translationY)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -210,10 +211,23 @@ public class PhotoActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
-                        if (scale >0) {
+                        Log.i(TAG, "scale = " + scale);
+                        if (scale >= 0.8 && scale <= 1) {
+                            scale = 1;
+                            alpha = 1;
+                            translationY = 0;
+                            translationX = 0;
+                            startScaleAnim(1, 1, 0, 0);
+                        } else {
+                            scale = thisScale;
+                            alpha = thisScale;
+                            translationX = marginLeft - (screenWidth - width) / 2;
+                            translationY = marginTop - (screenHeight - height) / 2;
 
+                            stopScaleAnim(thisScale, thisScale,
+                                    marginLeft - (screenWidth - width) / 2,
+                                    marginTop - (screenHeight - height) / 2);
                         }
-
                         break;
                     default:
                         break;
@@ -222,6 +236,37 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void stopScaleAnim(float scaleX, float scaleY,
+                                float translationX, float translationY) {
+        ivContent.animate()
+                .scaleX(scaleX).scaleY(scaleY)
+                .translationX(translationX).translationY(translationY)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        rlRoot.setBackgroundColor(Color.TRANSPARENT);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        Log.i(TAG, "onAnimationEnd");
+                        PhotoActivity.this.finish();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
+    }
+
 
     private void moveAndScaleImage(MotionEvent event) {
 
