@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,6 +144,8 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
 
     @Override
     public void refreshDataSuccess(List<String> urlList) {
+        releaseRefreshingState();
+
         if (urlList == null || urlList.size() == 0) {
             return;
         }
@@ -150,8 +153,6 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
         imageUrlList = urlList;
         adapter.setUrlList(urlList);
         adapter.notifyDataSetChanged();
-
-        releaseRefreshingState();
     }
 
     @Override
@@ -160,6 +161,7 @@ public class GirlFragment extends BaseMvpFragment<GirlView, GirlPresent> impleme
     }
 
     private void releaseRefreshingState() {
+        Log.i(TAG, "release refresh state!");
         footerHelp.resetScrollToFooterTag();
         rlFooter.setVisibility(View.GONE);
         if (refreshLayout.isRefreshing()) {

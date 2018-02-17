@@ -1,6 +1,7 @@
 package com.sppe.shrimppaste.ui;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -18,6 +19,7 @@ public class FooterHelp {
     private boolean isMoveToUp;
     private boolean scrollToFooterTag;
 
+    private int itemCount;
 
     public void attachScrollToFooterListener(RecyclerView recyclerView,
                                              final ScrollToFooterListener scrollToFooterListener) {
@@ -35,22 +37,32 @@ public class FooterHelp {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
+                boolean scrollToBottom = (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()
+                        >= recyclerView.computeVerticalScrollRange());
                 boolean isScrollToFooter
                         = isMoveToUp
-                        && (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()
-                        >= recyclerView.computeVerticalScrollRange())
+                        && scrollToBottom
                         && !scrollToFooterTag
                         && scrollToFooterListener != null;
 
                 if (isScrollToFooter) {
                     scrollToFooterTag = true;
                     scrollToFooterListener.scrollToFooter();
+                } else {
+                    Log.i(TAG, "isMoveToUp = " + isMoveToUp + "; scrollToBottom = "
+                            + scrollToBottom + "; scrollToFooterTag = " + scrollToFooterTag);
+
+                    Log.i(TAG, "computeVerticalScrollExtent = " + recyclerView.computeVerticalScrollExtent()
+                            + "computeVerticalScrollOffset = " + recyclerView.computeVerticalScrollOffset()
+                            + "computeVerticalScrollRange = " + recyclerView.computeVerticalScrollRange());
                 }
             }
         });
     }
 
     private void setOnTouchListener(RecyclerView recyclerView) {
+        itemCount = recyclerView.getAdapter().getItemCount();
+
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             float downY = 0;
 
@@ -65,6 +77,7 @@ public class FooterHelp {
                         if ((downY - event.getRawY()) > TOUCH_SLOP) {
                             isMoveToUp = true;
                         }
+                        downY = event.getRawY();
                         break;
                     default:
                         break;

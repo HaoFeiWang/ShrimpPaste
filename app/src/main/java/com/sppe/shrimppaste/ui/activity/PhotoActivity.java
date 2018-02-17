@@ -44,15 +44,20 @@ public class PhotoActivity extends AppCompatActivity {
 
     private float width;
     private float height;
+    private float actionBarHeight;
+
+    private float baseScaleX;
+    private float baseScaleY;
+    private float baseTranslationX;
+    private float baseTranslationY;
 
     private float touchSlop;
 
-    private float scale;
     private float alpha;
+    private float scale;
     private float translationX;
     private float translationY;
     private boolean isScaling;
-    private float thisScale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +75,17 @@ public class PhotoActivity extends AppCompatActivity {
         rlRoot = (RelativeLayout) findViewById(R.id.rl_photo_root);
         ivContent = (ImageView) findViewById(R.id.iv_content);
 
-        thisScale = width / screenWidth;
-        ivContent.setScaleX(thisScale);
-        ivContent.setScaleY(thisScale);
+        baseScaleY = height / screenHeight;
+        baseScaleX = width / screenWidth;
 
-        ivContent.setTranslationX(marginLeft - (screenWidth - width) / 2);
-        ivContent.setTranslationY(marginTop - (screenHeight - height) / 2);
+        baseTranslationX = marginLeft - (screenWidth - width) / 2;
+        baseTranslationY = marginTop - (screenHeight - height) / 2;
+
+        ivContent.setScaleX(baseScaleY);
+        ivContent.setScaleY(baseScaleY);
+
+        ivContent.setTranslationX(baseTranslationX);
+        ivContent.setTranslationY(baseTranslationY);
     }
 
     private void initBundleExtra() {
@@ -83,7 +93,8 @@ public class PhotoActivity extends AppCompatActivity {
         url = intent.getStringExtra(Contacts.GirlPhotoBundle.URL);
         marginTop = intent.getIntExtra(Contacts.GirlPhotoBundle.MARGIN_TOP, 0);
         marginLeft = intent.getIntExtra(Contacts.GirlPhotoBundle.MARGIN_LEFT, 0);
-        marginTop -= getResources().getDimensionPixelSize(R.dimen.action_bar_height);
+        actionBarHeight = getResources().getDimensionPixelSize(R.dimen.action_bar_height);
+        marginTop -= actionBarHeight;
 
         width = (float) intent.getIntExtra(Contacts.GirlPhotoBundle.WIDTH, 0);
         height = (float) (getResources().getDimensionPixelSize(R.dimen.girl_item_height));
@@ -96,11 +107,10 @@ public class PhotoActivity extends AppCompatActivity {
             windowManager.getDefaultDisplay().getMetrics(displayMetrics);
             screenWidth = displayMetrics.widthPixels;
             screenHeight = displayMetrics.heightPixels;
+            screenHeight -= actionBarHeight;
         }
 
         touchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
-        scale = 1;
-        alpha = 1;
     }
 
     private void initData() {
@@ -117,16 +127,21 @@ public class PhotoActivity extends AppCompatActivity {
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                                                    DataSource dataSource, boolean isFirstResource) {
                         ivContent.setImageDrawable(resource);
-                        startScaleAnim(1, 1, 0, 0);
+                        startScaleAnim();
                         return true;
                     }
                 }).into(ivContent);
     }
 
-    private void startScaleAnim(float scaleX, float scaleY,
-                                float translationX, float translationY) {
+    private void startScaleAnim() {
+
+        scale = 1;
+        alpha = 1;
+        translationX = 0;
+        translationY = 0;
+
         ivContent.animate()
-                .scaleX(scaleX).scaleY(scaleY)
+                .scaleX(scale).scaleY(scale)
                 .translationX(translationX).translationY(translationY)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -213,20 +228,9 @@ public class PhotoActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         Log.i(TAG, "scale = " + scale);
                         if (scale >= 0.8 && scale <= 1) {
-                            scale = 1;
-                            alpha = 1;
-                            translationY = 0;
-                            translationX = 0;
-                            startScaleAnim(1, 1, 0, 0);
+                            startScaleAnim();
                         } else {
-                            scale = thisScale;
-                            alpha = thisScale;
-                            translationX = marginLeft - (screenWidth - width) / 2;
-                            translationY = marginTop - (screenHeight - height) / 2;
-
-                            stopScaleAnim(thisScale, thisScale,
-                                    marginLeft - (screenWidth - width) / 2,
-                                    marginTop - (screenHeight - height) / 2);
+                            onBackPressed();
                         }
                         break;
                     default:
@@ -237,11 +241,11 @@ public class PhotoActivity extends AppCompatActivity {
         });
     }
 
-    private void stopScaleAnim(float scaleX, float scaleY,
-                                float translationX, float translationY) {
+    @Override
+    public void onBackPressed() {
         ivContent.animate()
-                .scaleX(scaleX).scaleY(scaleY)
-                .translationX(translationX).translationY(translationY)
+                .scaleX(baseScaleY).scaleY(baseScaleY)
+                .translationX(baseTranslationX).translationY(baseTranslationY)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -251,7 +255,8 @@ public class PhotoActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         Log.i(TAG, "onAnimationEnd");
-                        PhotoActivity.this.finish();
+                        overridePendingTransition(0,0);
+                        PhotoActivity.super.onBackPressed();
                     }
 
                     @Override
@@ -265,10 +270,5 @@ public class PhotoActivity extends AppCompatActivity {
                     }
                 })
                 .start();
-    }
-
-
-    private void moveAndScaleImage(MotionEvent event) {
-
     }
 }

@@ -76,6 +76,5 @@ public class GirlItemDecoration extends RecyclerView.ItemDecoration {
             //左
             outRect.set(leftMargin, 0, 0, bottomMargin);
         }
-//        outRect.set(leftMargin, 0, rightMargin, bottomMargin);
     }
 }
